@@ -16,5 +16,7 @@ public class Plugin : BaseUnityPlugin
         Logger.LogInfo("TABGVR plugin loaded.");
         
         AntiCheatBypass.Bypass();
+        
+        XRLoader.LoadXR();
     }
 }
