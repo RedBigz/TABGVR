@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using TABGVR.Patches;
 
 namespace TABGVR;
 
@@ -13,5 +14,7 @@ public class Plugin : BaseUnityPlugin
         Logger = base.Logger;
 
         Logger.LogInfo("TABGVR plugin loaded.");
+        
+        AntiCheatBypass.Bypass();
     }
 }
