@@ -35,8 +35,5 @@ public static class XRLoader
         
         var myDisplay = displays[0];
         myDisplay.Start();
-
-        Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
-        harmony.PatchAll();
     }
 }

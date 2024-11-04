@@ -18,5 +18,8 @@ public class Plugin : BaseUnityPlugin
         AntiCheatBypass.Bypass();
         
         XRLoader.LoadXR();
+        
+        Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
+        harmony.PatchAll();
     }
 }
