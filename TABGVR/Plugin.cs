@@ -2,6 +2,8 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using TABGVR.Patches;
+using TABGVR.Player;
+using UnityEngine.SceneManagement;
 
 namespace TABGVR;
 
@@ -22,5 +24,7 @@ public class Plugin : BaseUnityPlugin
         
         Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
+
+        SceneManager.sceneLoaded += (_, _) => Controllers.Setup();
     }
 }
