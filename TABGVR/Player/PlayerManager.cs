@@ -11,6 +11,8 @@ public class PlayerManager
     public Camera cameraComponent;
 
     public bool playerIsClient;
+    
+    public static PlayerManager LocalPlayer;
 
     public PlayerManager(GameObject root)
     {
@@ -21,6 +23,8 @@ public class PlayerManager
         
         cameraObject = playerRoot.transform.FindChildRecursive("Main Camera").gameObject;
         cameraComponent = cameraObject.GetComponent<Camera>();
+
+        if (playerIsClient) LocalPlayer = this;
     }
 
     public static PlayerManager FromCamera(Camera camera) => new(camera.transform
