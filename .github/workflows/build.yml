@@ -27,7 +27,7 @@ jobs:
       - name: Build Solution
         run: dotnet build -c release -p:TABGManaged=$(pwd)/Managed
       - name: Copy Binary to Template
-        run: cp ./TABGVR/bin/Release/netstandard2.1/TABGVR.dll Template/TABG/plugins
+        run: cp ./TABGVR/bin/Release/netstandard2.1/TABGVR.dll Template/TABGVR/plugins
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
