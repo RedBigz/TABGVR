@@ -1,0 +1,35 @@
+name: Build Solution
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "6.0.422"
+      - name: Download Template
+        run: |
+          mkdir Template
+          curl -o qic.tar.xz https://redbigz.com/lfs/TABG.VR.QuickInstallerContainer.tar.xz
+          tar -xf qic.tar.xz -C Template
+      - name: Download Assemblies
+        run: |
+          mkdir Managed
+          curl -o managed.tar.xz https://redbigz.com/lfs/TABG.VR.ManagedStripped.tar.xz
+          tar -xf managed.tar.xz -C Managed
+          
+          mkdir GameReferences
+          cp Template/TABGVR/core/* GameReferences # works well enough
+      - name: Build Solution
+        run: dotnet build -c release -p:TABGManaged=Managed
+      - name: Copy Binary to Template
+        run: cp ./TABGVR/bin/Release/netstandard2.1/TABGVR.dll Template/BepInEx/plugins
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TABGVR
+          path: "./Template/*"
