@@ -30,16 +30,17 @@
   
   <PropertyGroup>
     <TABGManaged>$(TABGFolder)\TotallyAccurateBattlegrounds_Data\Managed</TABGManaged>
+    <GameReferences>..\GameReferences</GameReferences>
   </PropertyGroup>
   
   <ItemGroup>
     <Reference Include="$(TABGManaged)\Assembly-CSharp.dll" Publicize="true" Private="false" />
     <Reference Include="$(TABGManaged)\Assembly-CSharp-firstpass.dll" Publicize="true" Private="false" />
     <Reference Include="$(TABGManaged)\UnityEngine.SpatialTracking.dll" Publicize="true" Private="false" />
-    <Reference Include="GameReferences\Unity.XR.CoreUtils.dll" Publicize="true" />
-    <Reference Include="GameReferences\Unity.XR.Interaction.Toolkit.dll" Publicize="true" />
-    <Reference Include="GameReferences\Unity.XR.Management.dll" Publicize="true" />
-    <Reference Include="GameReferences\Unity.XR.OpenXR.dll" Publicize="true" />
+    <Reference Include="$(GameReferences)\Unity.XR.CoreUtils.dll" Publicize="true" />
+    <Reference Include="$(GameReferences)\Unity.XR.Interaction.Toolkit.dll" Publicize="true" />
+    <Reference Include="$(GameReferences)\Unity.XR.Management.dll" Publicize="true" />
+    <Reference Include="$(GameReferences)\Unity.XR.OpenXR.dll" Publicize="true" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
