@@ -25,7 +25,7 @@ jobs:
           mkdir GameReferences
           cp Template/TABGVR/core/* GameReferences # works well enough
       - name: Build Solution
-        run: dotnet build -c release -p:TABGManaged=./Managed
+        run: dotnet build -c release -p:TABGManaged=$(pwd)/Managed
       - name: Copy Binary to Template
         run: cp ./TABGVR/bin/Release/netstandard2.1/TABGVR.dll Template/BepInEx/plugins
       - name: Upload Artifact
