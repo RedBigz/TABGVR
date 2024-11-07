@@ -40,6 +40,12 @@ class KinematicsPatch
                            joint.transform.GetChild(0).position);
     }
 
+    static void PositionLeftHandToHandguard(Holding holding)
+    {
+        holding.leftHand.MovePosition(holding.leftHand.position + holding.heldObject.leftHandPos.position -
+                                      holding.leftHand.transform.GetChild(0).position);
+    }
+
     [HarmonyPatch(nameof(Holding.Start))]
     [HarmonyPostfix]
     static void StartPostfix(Holding __instance)
@@ -60,7 +66,8 @@ class KinematicsPatch
 
         UpdateConnection(__instance.rightHand, Controllers.RightHand);
 
-        UpdateConnection(__instance.leftHand, Controllers.LeftHand);
+        if (__instance.heldObject && __instance.heldObject.leftHandPos) PositionLeftHandToHandguard(__instance);
+        else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
 
         var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
         if (!heldObject) return;
@@ -69,8 +76,11 @@ class KinematicsPatch
         var rightHold = heldObject.rightHandPos;
         var leftHold = heldObject.leftHandPos;
 
-        heldObject.gameObject.transform.rotation = Controllers.RightHand.transform.rotation * rightHold.localRotation *
-                                                   Quaternion.Euler(90f, 0f, 0f);
+        heldObject.gameObject.transform.rotation = heldObject.leftHandPos
+            ? Quaternion.LookRotation(
+                Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
+            : Controllers.RightHand.transform.rotation * rightHold.localRotation *
+              Quaternion.Euler(90f, 0f, 0f);
 
         var toMove = (Controllers.RightHandFromGameCamera +
             heldObject.gameObject.transform.position - rightHold.position);
