@@ -1,8 +1,7 @@
-using Epic.OnlineServices;
-using Epic.OnlineServices.Presence;
+using System.Collections;
 using HarmonyLib;
 using TABGVR.Player;
-using UltimateIK;
+using TABGVR.Player.Mundanities;
 using UnityEngine;
 
 namespace TABGVR.Patches;
@@ -22,10 +21,10 @@ class KinematicsPatch
 
         joint.isKinematic = false;
         arm.GetComponent<Rigidbody>().isKinematic = false;
-        
+
         foreach (var animationObject in joint.GetComponents<AnimationObject>()) Object.Destroy(animationObject);
         foreach (var animationObject in arm.GetComponents<AnimationObject>()) Object.Destroy(animationObject);
-        
+
         foreach (var collisionChecker in joint.GetComponents<CollisionChecker>()) Object.Destroy(collisionChecker);
         foreach (var collisionChecker in arm.GetComponents<CollisionChecker>()) Object.Destroy(collisionChecker);
     }
@@ -35,10 +34,10 @@ class KinematicsPatch
         var controllerRelativeToGameCamera = controller.transform.position - Controllers.Head.transform.position +
                                              Camera.current.transform.position;
 
-        if (Vector3.Distance(joint.position, controllerRelativeToGameCamera) < 0.1f) return;
+        // if (Vector3.Distance(joint.position, controllerRelativeToGameCamera) < 0.1f) return;
 
         joint.MovePosition(joint.position + controllerRelativeToGameCamera -
-            joint.transform.GetChild(0).position);
+                           joint.transform.GetChild(0).position);
     }
 
     [HarmonyPatch(nameof(Holding.Start))]
@@ -60,6 +59,52 @@ class KinematicsPatch
         //     $"KP {__instance.player} / Head: {Controllers.Head.transform.position} / Left: {Controllers.LeftHand.transform.position} / Right: {Controllers.RightHand.transform.position}");
 
         UpdateConnection(__instance.rightHand, Controllers.RightHand);
+
         UpdateConnection(__instance.leftHand, Controllers.LeftHand);
+
+        var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
+        if (!heldObject) return;
+
+        // held will have hand positions which will be exploited here
+        var rightHold = heldObject.rightHandPos;
+        var leftHold = heldObject.leftHandPos;
+
+        heldObject.gameObject.transform.rotation = Controllers.RightHand.transform.rotation * rightHold.localRotation *
+                                                   Quaternion.Euler(90f, 0f, 0f);
+
+        var toMove = (Controllers.RightHandFromGameCamera +
+            heldObject.gameObject.transform.position - rightHold.position);
+
+        if (__instance.heldObject)
+        {
+            var rigidBody = heldObject.GetComponent<Rigidbody>();
+
+            rigidBody.isKinematic = false;
+            rigidBody.useGravity = false;
+
+            rigidBody.MovePosition(toMove);
+        }
+        else heldObject.transform.position = toMove;
     }
+
+    [HarmonyPatch(nameof(Holding.ReachForPoint))]
+    [HarmonyPrefix]
+    static bool ReachForPointCanceller() => false;
+
+    private static IEnumerator DoNothing()
+    {
+        yield break;
+    }
+
+    [HarmonyPatch(nameof(Holding.HoldweaponStill))]
+    [HarmonyPrefix]
+    private static bool HoldWeaponStillCanceller(ref IEnumerator __result)
+    {
+        __result = DoNothing();
+        return false;
+    }
+
+    [HarmonyPatch(typeof(PlayerIKHandler), nameof(PlayerIKHandler.LateUpdate))]
+    [HarmonyPrefix]
+    static bool IKCanceller() => false;
 }
