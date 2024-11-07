@@ -1,6 +1,8 @@
+using DeepSky.Haze;
 using HarmonyLib;
 using TABGVR.Player;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SpatialTracking;
 
 namespace TABGVR.Patches;
@@ -11,14 +13,14 @@ public class CameraPatch
     public static void Postfix(PlayerCamera __instance)
     {
         Plugin.Logger.LogInfo($"Camera idle: {__instance.gameObject.name}");
-        
-        var playerManager = PlayerManager.FromCamera(__instance.GetComponent<Camera>());
+
+        var playerManager = PlayerManager.FromCamera(__instance.cam);
 
         var gameObject = new GameObject("VRCamera")
         {
             transform =
             {
-                parent = __instance.transform.parent.parent.parent.parent.parent.parent.parent,
+                parent = playerManager.playerRoot.transform.Find("CameraMovement"),
                 position = __instance.transform.position,
             },
             tag = "MainCamera",
@@ -36,11 +38,17 @@ public class CameraPatch
         var driver = gameObject.AddComponent<TrackedPoseDriver>();
         driver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
         driver.poseSource = TrackedPoseDriver.TrackedPose.Head;
-        
+
+        gameObject.AddComponent<FlareLayer>();
+        gameObject.AddComponent<DS_HazeView>();
+
+        var postProcessing = gameObject.AddComponent<PostProcessLayer>();
+        postProcessing.volumeTrigger = gameObject.transform;
+        postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
+        postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
+
         // var playerDriver = playerManager.playerRoot.AddComponent<PlayerDriver>();
         // playerDriver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
         // playerDriver.poseSource = TrackedPoseDriver.TrackedPose.Head;
-
-        // Object.Destroy(gameObject.GetComponent<HighlightingRenderer>());
     }
 }
