@@ -14,9 +14,20 @@ class KinematicsPatch
     {
         joint.GetComponentInChildren<Collider>().enabled = false;
 
+        var arm = joint.transform.parent.Find(joint.gameObject.name.Replace("Hand", "Arm")).gameObject;
+
         // disable gravity in arms
         joint.useGravity = false;
-        joint.transform.parent.Find(joint.gameObject.name).GetComponent<Rigidbody>().useGravity = false;
+        arm.GetComponent<Rigidbody>().useGravity = false;
+
+        joint.isKinematic = false;
+        arm.GetComponent<Rigidbody>().isKinematic = false;
+        
+        foreach (var animationObject in joint.GetComponents<AnimationObject>()) Object.Destroy(animationObject);
+        foreach (var animationObject in arm.GetComponents<AnimationObject>()) Object.Destroy(animationObject);
+        
+        foreach (var collisionChecker in joint.GetComponents<CollisionChecker>()) Object.Destroy(collisionChecker);
+        foreach (var collisionChecker in arm.GetComponents<CollisionChecker>()) Object.Destroy(collisionChecker);
     }
 
     static void UpdateConnection(Rigidbody joint, GameObject controller)
@@ -24,7 +35,7 @@ class KinematicsPatch
         var controllerRelativeToGameCamera = controller.transform.position - Controllers.Head.transform.position +
                                              Camera.current.transform.position;
 
-        if (Vector3.Distance(joint.position, controllerRelativeToGameCamera) < 0.01f) return;
+        if (Vector3.Distance(joint.position, controllerRelativeToGameCamera) < 0.1f) return;
 
         joint.MovePosition(joint.position + controllerRelativeToGameCamera -
             joint.transform.GetChild(0).position);
