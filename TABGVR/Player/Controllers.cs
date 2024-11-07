@@ -6,6 +6,9 @@ namespace TABGVR.Player;
 public static class Controllers
 {
     public static GameObject LeftHand, RightHand, Head;
+    
+    public static Vector3 LeftHandFromGameCamera => LeftHand.transform.position - Head.transform.position + Camera.current.transform.position;
+    public static Vector3 RightHandFromGameCamera => RightHand.transform.position - Head.transform.position + Camera.current.transform.position;
 
     public static void Setup()
     {
