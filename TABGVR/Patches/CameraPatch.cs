@@ -1,7 +1,9 @@
 using DeepSky.Haze;
 using HarmonyLib;
+using HighlightingSystem;
 using TABGVR.Player;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SpatialTracking;
 
@@ -46,6 +48,26 @@ public class CameraPatch
         postProcessing.volumeTrigger = gameObject.transform;
         postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
         postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
+        
+        var highlight = gameObject.AddComponent<HighlightingRenderer>();
+        var highlightReference = __instance.GetComponent<HighlightingRenderer>();
+        highlight.downsampleFactor = highlightReference.downsampleFactor;
+        highlight.iterations = highlightReference.iterations;
+        highlight.blurMinSpread = highlightReference.blurMinSpread;
+        highlight.blurSpread = highlightReference.blurSpread;
+        highlight.blurIntensity = highlightReference.blurIntensity;
+        
+        // constrain the camera
+        ConstraintSource source = new()
+        {
+            sourceTransform = gameObject.transform,
+            weight = 1f
+        };
+
+        var constraint = __instance.gameObject.AddComponent<RotationConstraint>();
+        constraint.AddSource(source);
+
+        constraint.constraintActive = true;
 
         // var playerDriver = playerManager.playerRoot.AddComponent<PlayerDriver>();
         // playerDriver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
