@@ -11,7 +11,7 @@ class KinematicsPatch
 {
     static void SetupConnection(Rigidbody joint)
     {
-        joint.GetComponentInChildren<Collider>().enabled = false;
+        // joint.GetComponentInChildren<Collider>().enabled = false;
 
         var arm = joint.transform.parent.Find(joint.gameObject.name.Replace("Hand", "Arm")).gameObject;
 
