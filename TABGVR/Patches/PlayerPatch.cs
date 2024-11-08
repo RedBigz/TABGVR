@@ -9,31 +9,36 @@ namespace TABGVR.Patches;
 public class PlayerPatch
 {
     private static Transform _rotationTarget;
+    private static PlayerManager _playerManager;
 
     [HarmonyPatch(nameof(global::Player.Start))]
     [HarmonyPostfix]
     public static void Start(global::Player __instance)
     {
-        PlayerManager playerManager = new(__instance.gameObject);
+        _playerManager = new(__instance.gameObject);
 
-        if (!playerManager.playerIsClient) return; // run the rest if we are the player
+        if (!_playerManager.playerIsClient) return; // run the rest if we are the player
 
         // run code on player load here
 
-        _rotationTarget = playerManager.playerRoot.transform.Find("CameraMovement").Find("CameraRotationX");
+        _rotationTarget = _playerManager.playerRoot.transform.Find("CameraMovement").Find("CameraRotationX");
         // .Find("RotationTarget");
 
         var playerDriver = _rotationTarget.gameObject.AddComponent<RotationTargetDriver>();
 
         playerDriver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
         playerDriver.poseSource = TrackedPoseDriver.TrackedPose.Head;
+
+        _playerManager.playerRoot.AddComponent<VRControls>();
     }
 
     [HarmonyPatch(nameof(global::Player.Update))]
     [HarmonyPostfix]
     public static void Update(global::Player __instance)
     {
-        var rigidBody = PlayerManager.LocalPlayer.player.Torso.GetComponent<Rigidbody>();
+        if (!_playerManager.playerIsClient) return;
+
+        var rigidBody = _playerManager.player.Torso.GetComponent<Rigidbody>();
 
         rigidBody?.MoveRotation(Quaternion.Euler(0, _rotationTarget.eulerAngles.y, 0));
     }
