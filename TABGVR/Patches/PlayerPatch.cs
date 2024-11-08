@@ -21,7 +21,7 @@ public class PlayerPatch
         // run code on player load here
 
         _rotationTarget = playerManager.playerRoot.transform.Find("CameraMovement").Find("CameraRotationX");
-            // .Find("RotationTarget");
+        // .Find("RotationTarget");
 
         var playerDriver = _rotationTarget.gameObject.AddComponent<RotationTargetDriver>();
 
@@ -34,6 +34,7 @@ public class PlayerPatch
     public static void Update(global::Player __instance)
     {
         var rigidBody = PlayerManager.LocalPlayer.player.Torso.GetComponent<Rigidbody>();
-        
-        rigidBody.MoveRotation(Quaternion.Euler(0, _rotationTarget.eulerAngles.y, 0));}
+
+        rigidBody?.MoveRotation(Quaternion.Euler(0, _rotationTarget.eulerAngles.y, 0));
+    }
 }
