@@ -9,10 +9,13 @@ using UnityEngine.SpatialTracking;
 
 namespace TABGVR.Patches;
 
-[HarmonyPatch(typeof(PlayerCamera), nameof(PlayerCamera.Start))]
+[HarmonyPatch(typeof(PlayerCamera))]
 public class CameraPatch
 {
-    public static void Postfix(PlayerCamera __instance)
+    
+    [HarmonyPatch(nameof(PlayerCamera.Start))]
+    [HarmonyPostfix]
+    public static void Start(PlayerCamera __instance)
     {
         Plugin.Logger.LogInfo($"Camera idle: {__instance.gameObject.name}");
 
@@ -48,7 +51,7 @@ public class CameraPatch
         postProcessing.volumeTrigger = gameObject.transform;
         postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
         postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
-        
+
         var highlight = gameObject.AddComponent<HighlightingRenderer>();
         var highlightReference = __instance.GetComponent<HighlightingRenderer>();
         highlight.downsampleFactor = highlightReference.downsampleFactor;
@@ -56,7 +59,7 @@ public class CameraPatch
         highlight.blurMinSpread = highlightReference.blurMinSpread;
         highlight.blurSpread = highlightReference.blurSpread;
         highlight.blurIntensity = highlightReference.blurIntensity;
-        
+
         // constrain the camera
         ConstraintSource source = new()
         {
@@ -68,9 +71,5 @@ public class CameraPatch
         constraint.AddSource(source);
 
         constraint.constraintActive = true;
-
-        // var playerDriver = playerManager.playerRoot.AddComponent<PlayerDriver>();
-        // playerDriver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
-        // playerDriver.poseSource = TrackedPoseDriver.TrackedPose.Head;
     }
 }
