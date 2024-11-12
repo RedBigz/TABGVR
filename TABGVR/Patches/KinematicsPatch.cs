@@ -3,12 +3,16 @@ using HarmonyLib;
 using TABGVR.Player;
 using TABGVR.Player.Mundanities;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace TABGVR.Patches;
 
 [HarmonyPatch(typeof(Holding))]
 class KinematicsPatch
 {
+    internal static bool _gripAvailable;
+    internal static bool _gripping;
+
     static void SetupConnection(Rigidbody joint)
     {
         // joint.GetComponentInChildren<Collider>().enabled = false;
@@ -64,19 +68,33 @@ class KinematicsPatch
         // Plugin.Logger.LogInfo(
         //     $"KP {__instance.player} / Head: {Controllers.Head.transform.position} / Left: {Controllers.LeftHand.transform.position} / Right: {Controllers.RightHand.transform.position}");
 
-        UpdateConnection(__instance.rightHand, Controllers.RightHand);
-
-        if (__instance.heldObject && __instance.heldObject.leftHandPos) PositionLeftHandToHandguard(__instance);
-        else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
-
+        // held will have hand positions which will be exploited here
         var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
         if (!heldObject) return;
 
-        // held will have hand positions which will be exploited here
         var rightHold = heldObject.rightHandPos;
         var leftHold = heldObject.leftHandPos;
 
-        heldObject.gameObject.transform.rotation = heldObject.leftHandPos
+        UpdateConnection(__instance.rightHand, Controllers.RightHand);
+
+        if (__instance.heldObject && __instance.heldObject.leftHandPos)
+        {
+            Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.grip, out var leftGrip);
+            _gripAvailable =
+                !_gripping && Vector3.Distance(leftHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
+
+            if (leftGrip > VRControls.TriggerDeadZone)
+            {
+                if (_gripAvailable) _gripping = true;
+            }
+            else _gripping = false;
+        }
+        else _gripping = false;
+
+        if (_gripping) PositionLeftHandToHandguard(__instance);
+        else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
+
+        heldObject.gameObject.transform.rotation = _gripping
             ? Quaternion.LookRotation(
                 Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
             : Controllers.RightHand.transform.rotation *
