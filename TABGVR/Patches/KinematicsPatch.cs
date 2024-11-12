@@ -70,15 +70,14 @@ class KinematicsPatch
 
         // held will have hand positions which will be exploited here
         var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
-        if (!heldObject) return;
-
-        var rightHold = heldObject.rightHandPos;
-        var leftHold = heldObject.leftHandPos;
 
         UpdateConnection(__instance.rightHand, Controllers.RightHand);
 
         if (__instance.heldObject && __instance.heldObject.leftHandPos)
         {
+            var rightHold = heldObject.rightHandPos;
+            var leftHold = heldObject.leftHandPos;
+
             Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.grip, out var leftGrip);
             _gripAvailable =
                 !_gripping && Vector3.Distance(leftHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
@@ -88,31 +87,29 @@ class KinematicsPatch
                 if (_gripAvailable) _gripping = true;
             }
             else _gripping = false;
-        }
-        else _gripping = false;
 
-        if (_gripping) PositionLeftHandToHandguard(__instance);
-        else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
+            heldObject.gameObject.transform.rotation = _gripping
+                ? Quaternion.LookRotation(
+                    Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
+                : Controllers.RightHand.transform.rotation *
+                  Quaternion.Euler(90f + rightHold.localRotation.x, rightHold.localRotation.y, 0f);
 
-        heldObject.gameObject.transform.rotation = _gripping
-            ? Quaternion.LookRotation(
-                Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
-            : Controllers.RightHand.transform.rotation *
-              Quaternion.Euler(90f + rightHold.localRotation.x, rightHold.localRotation.y, 0f);
+            var toMove = (Controllers.RightHandFromGameCamera +
+                heldObject.gameObject.transform.position - rightHold.position);
 
-        var toMove = (Controllers.RightHandFromGameCamera +
-            heldObject.gameObject.transform.position - rightHold.position);
-
-        if (__instance.heldObject)
-        {
             var rigidBody = heldObject.GetComponent<Rigidbody>();
 
             rigidBody.isKinematic = false;
             rigidBody.useGravity = false;
 
             rigidBody.MovePosition(toMove);
+
+            heldObject.transform.position = toMove;
         }
-        else heldObject.transform.position = toMove;
+        else _gripping = false;
+
+        if (_gripping) PositionLeftHandToHandguard(__instance);
+        else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
     }
 
     [HarmonyPatch(nameof(Holding.ReachForPoint))]
