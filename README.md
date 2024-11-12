@@ -6,3 +6,5 @@
 
 ## Controller Layout
 ![Controller Layout](auxillary/controller_layout.svg)
+
+(NOTE: Snap Turn, Weapon Switching, Inventory, and Fire Mode are not implemented yet!)
