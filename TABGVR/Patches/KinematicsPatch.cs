@@ -79,8 +79,8 @@ class KinematicsPatch
         heldObject.gameObject.transform.rotation = heldObject.leftHandPos
             ? Quaternion.LookRotation(
                 Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
-            : Controllers.RightHand.transform.rotation * rightHold.localRotation *
-              Quaternion.Euler(90f, 0f, 0f);
+            : Controllers.RightHand.transform.rotation *
+              Quaternion.Euler(90f + rightHold.localRotation.x, rightHold.localRotation.y, 0f);
 
         var toMove = (Controllers.RightHandFromGameCamera +
             heldObject.gameObject.transform.position - rightHold.position);
