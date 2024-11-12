@@ -1,2 +1,8 @@
 # TABG VR
-[>> IF YOU'RE A BETA TESTER  CLICK HERE FOR INSTRUCTIONS <<](BETATESTERS.md)
+![Shooting Test](img/shoot_test.gif)
+
+## Installation
+[Refer to the Setup Guide for installation Instructions.](SETUP.md)
+
+## Controller Layout
+![Controller Layout](auxillary/controller_layout.svg)

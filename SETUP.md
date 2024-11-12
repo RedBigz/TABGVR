@@ -1,4 +1,4 @@
-# Beta Testing Guide
+# Setup Guide
  
 > [!CAUTION]
 > Due to the nature of this mod, we cannot ensure that this will never be flagged as a cheat tool. If you would like to play normally without VR and matchmaking restrictions enforced by the mod for your safety, rename winhttp.dll to something else to stop the injector. **(RE)MOVING THE TABGVR PLUGIN IN THE FILES WILL NOT STOP THE INJECTOR AND EAC WILL DETECT SUSPICIOUS FILES!**
