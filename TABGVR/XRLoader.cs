@@ -10,6 +10,9 @@ namespace TABGVR;
 
 public static class XRLoader
 {
+    /// <summary>
+    /// Loads OpenXR.
+    /// </summary>
     internal static void LoadXR()
     {
         // a lot of this is borrowed (stolen) from daxcess' LCVR

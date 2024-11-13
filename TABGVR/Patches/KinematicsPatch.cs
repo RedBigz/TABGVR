@@ -13,6 +13,10 @@ class KinematicsPatch
     internal static bool _gripAvailable;
     internal static bool _gripping;
 
+    /// <summary>
+    /// Sets up hand connection for joint by removing properties that cause issues.
+    /// </summary>
+    /// <param name="joint">Hand Joint</param>
     static void SetupConnection(Rigidbody joint)
     {
         // joint.GetComponentInChildren<Collider>().enabled = false;
@@ -33,6 +37,11 @@ class KinematicsPatch
         foreach (var collisionChecker in arm.GetComponents<CollisionChecker>()) Object.Destroy(collisionChecker);
     }
 
+    /// <summary>
+    /// Updates <paramref name="joint"/>'s position to <paramref name="controller"/>.
+    /// </summary>
+    /// <param name="joint">Hand Joint</param>
+    /// <param name="controller">VR Controller made by <see cref="Controllers"/></param>
     static void UpdateConnection(Rigidbody joint, GameObject controller)
     {
         var controllerRelativeToGameCamera = controller.transform.position - Controllers.Head.transform.position +
@@ -44,12 +53,20 @@ class KinematicsPatch
                            joint.transform.GetChild(0).position);
     }
 
+    /// <summary>
+    /// Position left hand to left hand attachment point on gun (handguard) instead of the VR controller to avoid visual weirdness.
+    /// </summary>
+    /// <param name="holding">Holding Script</param>
     static void PositionLeftHandToHandguard(Holding holding)
     {
         holding.leftHand.MovePosition(holding.leftHand.position + holding.heldObject.leftHandPos.position -
                                       holding.leftHand.transform.GetChild(0).position);
     }
 
+    /// <summary>
+    /// Sets up hands for VR IK after Holding.Start.
+    /// </summary>
+    /// <param name="__instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.Start))]
     [HarmonyPostfix]
     static void StartPostfix(Holding __instance)
@@ -58,6 +75,10 @@ class KinematicsPatch
         SetupConnection(__instance.leftHand);
     }
 
+    /// <summary>
+    /// Runs aiming and positioning for arms and guns after Holding.Update.
+    /// </summary>
+    /// <param name="__instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.Update))]
     [HarmonyPostfix]
     static void UpdatePostfix(Holding __instance)
@@ -88,6 +109,7 @@ class KinematicsPatch
             }
             else _gripping = false;
 
+            // look at left controller if gripping, or else just use the right controller rotation
             heldObject.gameObject.transform.rotation = _gripping
                 ? Quaternion.LookRotation(
                     Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
@@ -112,15 +134,26 @@ class KinematicsPatch
         else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
     }
 
+    /// <summary>
+    /// Cancels Holding.ReachForPoint from running.
+    /// </summary>
     [HarmonyPatch(nameof(Holding.ReachForPoint))]
     [HarmonyPrefix]
     static bool ReachForPointCanceller() => false;
 
+    /// <summary>
+    /// Method that does nothing.
+    /// </summary>
+    /// <returns>IEnumerator that breaks on start</returns>
     private static IEnumerator DoNothing()
     {
         yield break;
     }
 
+    /// <summary>
+    /// Cancels Holding.HoldWeaponStill from running.
+    /// </summary>
+    /// <param name="__result"><see cref="DoNothing"/></param>
     [HarmonyPatch(nameof(Holding.HoldweaponStill))]
     [HarmonyPrefix]
     private static bool HoldWeaponStillCanceller(ref IEnumerator __result)
@@ -129,6 +162,9 @@ class KinematicsPatch
         return false;
     }
 
+    /// <summary>
+    /// Cancels PlayerIKHandler.LateUpdate from running.
+    /// </summary>
     [HarmonyPatch(typeof(PlayerIKHandler), nameof(PlayerIKHandler.LateUpdate))]
     [HarmonyPrefix]
     static bool IKCanceller() => false;

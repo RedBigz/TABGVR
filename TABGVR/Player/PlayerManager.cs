@@ -27,6 +27,11 @@ public class PlayerManager
         if (playerIsClient) LocalPlayer = this;
     }
 
+    /// <summary>
+    /// Creates PlayerManager from game camera.
+    /// </summary>
+    /// <param name="camera">Player's <see cref="Camera"/></param>
+    /// <returns><see cref="PlayerManager"/></returns>
     public static PlayerManager FromCamera(Camera camera) => new(camera.transform
         .parent // Pivot
         .parent // PositionShake

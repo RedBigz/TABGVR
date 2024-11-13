@@ -11,6 +11,11 @@ public class PlayerPatch
     private static Transform _rotationTarget;
     private static PlayerManager _playerManager;
 
+    
+    /// <summary>
+    /// Adds <see cref="VRControls"/> and <see cref="RotationTargetDriver"/> on local <see cref="Player"/>.
+    /// </summary>
+    /// <param name="__instance"></param>
     [HarmonyPatch(nameof(global::Player.Start))]
     [HarmonyPostfix]
     public static void Start(global::Player __instance)

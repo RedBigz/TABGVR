@@ -4,6 +4,9 @@ namespace TABGVR.Player.Mundanities;
 
 public class Grenades
 {
+    /// <summary>
+    /// Selected Grenade.
+    /// </summary>
     [CanBeNull]
     public static Grenade SelectedGrenade =>
         PlayerManager.LocalPlayer.player.GetComponent<Holding>().rightHand.GetComponentInChildren<Grenade>();

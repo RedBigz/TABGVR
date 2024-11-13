@@ -7,6 +7,10 @@ namespace TABGVR.Patches;
 
 public class AntiCheatBypass
 {
+    /// <summary>
+    /// Bypasses the anticheat.<br/>
+    /// <b>WARNING: THIS KICKS YOU OFF OFFICIAL SERVERS!</b>
+    /// </summary>
     internal static void Bypass()
     {
         Harmony.CreateAndPatchAll(typeof(AntiCheatBypass), "com.redbigz.AntiCheatBypass");
@@ -14,6 +18,10 @@ public class AntiCheatBypass
         Plugin.Logger.LogInfo("Just so you know, bypassing the Anti-Cheat cuts you off from official servers. Matchmaking has been disabled for your safety.");
     }
     
+    /// <summary>
+    /// Patches <see cref="ACInterface"/> to disable AC.
+    /// </summary>
+    /// <param name="ACInterface"><see cref="ACInterface"/></param>
     [HarmonyPatch(typeof(Easy_AC_Client), nameof(Easy_AC_Client.SetACInterface))]
     [HarmonyPrefix]
     private static bool SetACInterface(AntiCheatClientInterface ACInterface)
@@ -22,6 +30,9 @@ public class AntiCheatBypass
         return false;
     }
 
+    /// <summary>
+    /// Patches <see cref="MatchmakingHandler"/> to raise a notification if you try to matchmake, as well as blocking the matchmaking process.
+    /// </summary>
     [HarmonyPatch(typeof(MatchmakingHandler), nameof(MatchmakingHandler.StartSearch))]
     [HarmonyPrefix]
     private static bool StartSearch()

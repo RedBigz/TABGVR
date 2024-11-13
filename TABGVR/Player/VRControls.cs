@@ -42,6 +42,9 @@ public class VRControls : MonoBehaviour
     private bool _xButtonPressed;
     private bool _yButtonPressed;
     
+    /// <summary>
+    /// Picks up selected <see cref="Pickup"/>.
+    /// </summary>
     private void PickupInteract()
     {
         if (currentPickup && !currentPickup.hasBeenPickedUp && interactionHandler.pickupCor == null)

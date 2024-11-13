@@ -12,7 +12,10 @@ namespace TABGVR.Patches;
 [HarmonyPatch(typeof(PlayerCamera))]
 public class CameraPatch
 {
-    
+    /// <summary>
+    /// Creates VR Camera after <see cref="PlayerCamera"/> starts.
+    /// </summary>
+    /// <param name="__instance"><see cref="PlayerCamera"/></param>
     [HarmonyPatch(nameof(PlayerCamera.Start))]
     [HarmonyPostfix]
     public static void Start(PlayerCamera __instance)
