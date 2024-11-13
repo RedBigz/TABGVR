@@ -31,15 +31,4 @@ public class PlayerPatch
 
         _playerManager.playerRoot.AddComponent<VRControls>();
     }
-
-    [HarmonyPatch(nameof(global::Player.Update))]
-    [HarmonyPostfix]
-    public static void Update(global::Player __instance)
-    {
-        if (!_playerManager.playerIsClient) return;
-
-        var rigidBody = _playerManager.player.Torso.GetComponent<Rigidbody>();
-
-        rigidBody?.MoveRotation(Quaternion.Euler(0, _rotationTarget.eulerAngles.y, 0));
-    }
 }
