@@ -5,7 +5,7 @@ namespace TABGVR.Player.Mundanities;
 public class Grenades
 {
     /// <summary>
-    /// Selected Grenade.
+    ///     Selected Grenade.
     /// </summary>
     [CanBeNull]
     public static Grenade SelectedGrenade =>

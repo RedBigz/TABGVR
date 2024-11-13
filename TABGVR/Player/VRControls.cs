@@ -6,17 +6,24 @@ namespace TABGVR.Player;
 
 public class VRControls : MonoBehaviour
 {
-    private WeaponHandler weaponHandler;
-    private MovementHandler movementHandler;
-    private InputHandler inputHandler;
-    private InteractionHandler interactionHandler;
-    private global::Player player;
-    private Transform rotationX;
-    private HaxInput haxInput;
+    internal const float TriggerDeadZone = 0.7f;
+
+    private bool _aButtonPressed;
+    private bool _bButtonPressed;
+    private bool _leftTriggered;
+
+    private bool _rightTriggered;
+    private bool _xButtonPressed;
+    private bool _yButtonPressed;
 
     [CanBeNull] private Pickup currentPickup;
-
-    internal const float TriggerDeadZone = 0.7f;
+    private HaxInput haxInput;
+    private InputHandler inputHandler;
+    private InteractionHandler interactionHandler;
+    private MovementHandler movementHandler;
+    private global::Player player;
+    private Transform rotationX;
+    private WeaponHandler weaponHandler;
 
     private void Start()
     {
@@ -34,25 +41,6 @@ public class VRControls : MonoBehaviour
         inputHandler.enabled = false;
     }
 
-    private bool _rightTriggered;
-    private bool _leftTriggered;
-
-    private bool _aButtonPressed;
-    private bool _bButtonPressed;
-    private bool _xButtonPressed;
-    private bool _yButtonPressed;
-    
-    /// <summary>
-    /// Picks up selected <see cref="Pickup"/>.
-    /// </summary>
-    private void PickupInteract()
-    {
-        if (currentPickup && !currentPickup.hasBeenPickedUp && interactionHandler.pickupCor == null)
-            interactionHandler.StartCoroutine(interactionHandler.StartPickup(currentPickup,
-                currentPickup.weaponType == global::Pickup.WeaponType.Weapon &&
-                !player.m_inventory.HasSpaceForWeapon(currentPickup)));
-    }
-
     private void Update()
     {
         if (movementHandler.death.dead) return;
@@ -68,7 +56,7 @@ public class VRControls : MonoBehaviour
 
         Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.secondaryButton, out var bButton);
         Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.secondaryButton, out var yButton);
-        
+
         Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out var rightClick);
 
         if (rightTrigger > TriggerDeadZone)
@@ -78,7 +66,10 @@ public class VRControls : MonoBehaviour
                 if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
                 else PickupInteract();
             }
-            else if (weaponHandler.rightWeapon) weaponHandler.HoldAttack(true, false);
+            else if (weaponHandler.rightWeapon)
+            {
+                weaponHandler.HoldAttack(true, false);
+            }
         }
 
         if (leftTrigger > TriggerDeadZone)
@@ -88,7 +79,10 @@ public class VRControls : MonoBehaviour
                 if (weaponHandler.leftWeapon) weaponHandler.PressAttack(false, false);
                 else PickupInteract();
             }
-            else if (weaponHandler.leftWeapon) weaponHandler.HoldAttack(false, false);
+            else if (weaponHandler.leftWeapon)
+            {
+                weaponHandler.HoldAttack(false, false);
+            }
         }
 
         _rightTriggered = rightTrigger > TriggerDeadZone;
@@ -112,5 +106,16 @@ public class VRControls : MonoBehaviour
         _bButtonPressed = bButton;
         _xButtonPressed = xButton;
         _yButtonPressed = yButton;
+    }
+
+    /// <summary>
+    ///     Picks up selected <see cref="Pickup" />.
+    /// </summary>
+    private void PickupInteract()
+    {
+        if (currentPickup && !currentPickup.hasBeenPickedUp && interactionHandler.pickupCor == null)
+            interactionHandler.StartCoroutine(interactionHandler.StartPickup(currentPickup,
+                currentPickup.weaponType == Pickup.WeaponType.Weapon &&
+                !player.m_inventory.HasSpaceForWeapon(currentPickup)));
     }
 }

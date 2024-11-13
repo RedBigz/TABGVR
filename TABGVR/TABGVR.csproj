@@ -1,50 +1,50 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>TABGVR</AssemblyName>
-    <Description>TABG VR Mod</Description>
-    <Version>0.0.0</Version>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
-    <RestoreAdditionalProjectSources>
-      https://api.nuget.org/v3/index.json;
-      https://nuget.bepinex.dev/v3/index.json;
-      https://nuget.samboy.dev/v3/index.json
-    </RestoreAdditionalProjectSources>
-    <RootNamespace>TABGVR</RootNamespace>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>TABGVR</AssemblyName>
+        <Description>TABG VR Mod</Description>
+        <Version>0.0.0</Version>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <RestoreAdditionalProjectSources>
+            https://api.nuget.org/v3/index.json;
+            https://nuget.bepinex.dev/v3/index.json;
+            https://nuget.samboy.dev/v3/index.json
+        </RestoreAdditionalProjectSources>
+        <RootNamespace>TABGVR</RootNamespace>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" />
-    <PackageReference Include="BepInEx.Core" Version="5.*" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="UnityEngine.Modules" Version="2021.3.22" IncludeAssets="compile" />
-  </ItemGroup>
-  
-  <PropertyGroup>
-    <!-- Your Game Folder -->
-    <TABGFolder>C:\Program Files (x86)\Steam\steamapps\common\TotallyAccurateBattlegrounds</TABGFolder>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <TABGManaged>$(TABGFolder)\TotallyAccurateBattlegrounds_Data\Managed</TABGManaged>
-    <GameReferences>..\GameReferences</GameReferences>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <Reference Include="$(TABGManaged)\Assembly-CSharp.dll" Publicize="true" Private="false" />
-    <Reference Include="$(TABGManaged)\Assembly-CSharp-firstpass.dll" Publicize="true" Private="false" />
-    <Reference Include="$(TABGManaged)\Unity.Postprocessing.Runtime.dll" Publicize="true" Private="false" />
-    <Reference Include="$(TABGManaged)\UnityEngine.SpatialTracking.dll" Publicize="true" Private="false" />
-    <Reference Include="$(GameReferences)\Unity.XR.CoreUtils.dll" Publicize="true" />
-    <Reference Include="$(GameReferences)\Unity.XR.Interaction.Toolkit.dll" Publicize="true" />
-    <Reference Include="$(GameReferences)\Unity.XR.Management.dll" Publicize="true" />
-    <Reference Include="$(GameReferences)\Unity.XR.OpenXR.dll" Publicize="true" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2"/>
+        <PackageReference Include="BepInEx.Core" Version="5.*"/>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*"/>
+        <PackageReference Include="UnityEngine.Modules" Version="2021.3.22" IncludeAssets="compile"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <!-- Your Game Folder -->
+        <TABGFolder>C:\Program Files (x86)\Steam\steamapps\common\TotallyAccurateBattlegrounds</TABGFolder>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TABGManaged>$(TABGFolder)\TotallyAccurateBattlegrounds_Data\Managed</TABGManaged>
+        <GameReferences>..\GameReferences</GameReferences>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="$(TABGManaged)\Assembly-CSharp.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(TABGManaged)\Assembly-CSharp-firstpass.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(TABGManaged)\Unity.Postprocessing.Runtime.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(TABGManaged)\UnityEngine.SpatialTracking.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(GameReferences)\Unity.XR.CoreUtils.dll" Publicize="true"/>
+        <Reference Include="$(GameReferences)\Unity.XR.Interaction.Toolkit.dll" Publicize="true"/>
+        <Reference Include="$(GameReferences)\Unity.XR.Management.dll" Publicize="true"/>
+        <Reference Include="$(GameReferences)\Unity.XR.OpenXR.dll" Publicize="true"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
+    </ItemGroup>
 </Project>

@@ -11,16 +11,16 @@ public class PlayerPatch
     private static Transform _rotationTarget;
     private static PlayerManager _playerManager;
 
-    
+
     /// <summary>
-    /// Adds <see cref="VRControls"/> and <see cref="RotationTargetDriver"/> on local <see cref="Player"/>.
+    ///     Adds <see cref="VRControls" /> and <see cref="RotationTargetDriver" /> on local <see cref="Player" />.
     /// </summary>
     /// <param name="__instance"></param>
     [HarmonyPatch(nameof(global::Player.Start))]
     [HarmonyPostfix]
     public static void Start(global::Player __instance)
     {
-        _playerManager = new(__instance.gameObject);
+        _playerManager = new PlayerManager(__instance.gameObject);
 
         if (!_playerManager.playerIsClient) return; // run the rest if we are the player
 

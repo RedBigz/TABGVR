@@ -13,9 +13,11 @@ namespace TABGVR.Patches;
 public class CameraPatch
 {
     /// <summary>
-    /// Creates VR Camera after <see cref="PlayerCamera"/> starts.
+    ///     Creates VR Camera after <see cref="PlayerCamera" /> starts.
     /// </summary>
-    /// <param name="__instance"><see cref="PlayerCamera"/></param>
+    /// <param name="__instance">
+    ///     <see cref="PlayerCamera" />
+    /// </param>
     [HarmonyPatch(nameof(PlayerCamera.Start))]
     [HarmonyPostfix]
     public static void Start(PlayerCamera __instance)
@@ -29,7 +31,7 @@ public class CameraPatch
             transform =
             {
                 parent = playerManager.playerRoot.transform.Find("CameraMovement"),
-                position = __instance.transform.position,
+                position = __instance.transform.position
             },
             tag = "MainCamera",
             layer = __instance.gameObject.layer

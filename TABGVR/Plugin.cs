@@ -17,11 +17,11 @@ public class Plugin : BaseUnityPlugin
         Logger = base.Logger;
 
         Logger.LogInfo("TABGVR plugin loaded.");
-        
+
         AntiCheatBypass.Bypass();
-        
+
         XRLoader.LoadXR();
-        
+
         Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
 

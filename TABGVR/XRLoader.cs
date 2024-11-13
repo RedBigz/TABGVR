@@ -11,7 +11,7 @@ namespace TABGVR;
 public static class XRLoader
 {
     /// <summary>
-    /// Loads OpenXR.
+    ///     Loads OpenXR.
     /// </summary>
     internal static void LoadXR()
     {
@@ -32,7 +32,7 @@ public static class XRLoader
 
         oculusTouch.enabled = true;
 
-        OpenXRSettings.Instance.features = new List<OpenXRFeature>()
+        OpenXRSettings.Instance.features = new List<OpenXRFeature>
         {
             oculusTouch
         }.ToArray();

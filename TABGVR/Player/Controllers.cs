@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
-using UnityEngine.XR.Interaction.Toolkit;
 
 namespace TABGVR.Player;
 
@@ -10,26 +9,26 @@ public static class Controllers
 {
     public static GameObject LeftHand, RightHand, Head;
 
+
     /// <summary>
-    /// Left hand Vector3 in relative space.
+    ///     <see cref="InputDevice" />s of each hand.
+    /// </summary>
+    public static InputDevice LeftHandXR, RightHandXR;
+
+    /// <summary>
+    ///     Left hand Vector3 in relative space.
     /// </summary>
     public static Vector3 LeftHandFromGameCamera =>
         LeftHand.transform.position - Head.transform.position + Camera.current.transform.position;
 
     /// <summary>
-    /// Right hand Vector3 in relative space.
+    ///     Right hand Vector3 in relative space.
     /// </summary>
     public static Vector3 RightHandFromGameCamera =>
         RightHand.transform.position - Head.transform.position + Camera.current.transform.position;
 
-    
     /// <summary>
-    /// <see cref="InputDevice"/>s of each hand.
-    /// </summary>
-    public static InputDevice LeftHandXR, RightHandXR;
-
-    /// <summary>
-    /// Sets up VR Controllers.
+    ///     Sets up VR Controllers.
     /// </summary>
     public static void Setup()
     {
