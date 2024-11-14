@@ -59,6 +59,12 @@ public class VRControls : MonoBehaviour
         Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.secondaryButton, out var yButton);
 
         Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out var rightClick);
+        Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out var leftClick);
+
+        if (leftClick && !inputHandler.isSpringting)
+            inputHandler.isSpringting = true;
+
+        inputHandler.isSpringting &= leftJoystick.magnitude > StopSprintingThreshold;
 
         if (rightTrigger > TriggerDeadZone)
         {
