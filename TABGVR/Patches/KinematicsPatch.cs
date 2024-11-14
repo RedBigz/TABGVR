@@ -95,23 +95,28 @@ internal class KinematicsPatch
 
         UpdateConnection(__instance.rightHand, Controllers.RightHand);
 
-        if (__instance.heldObject && __instance.heldObject.leftHandPos)
+        if (__instance.heldObject)
         {
             var rightHold = heldObject.rightHandPos;
             var leftHold = heldObject.leftHandPos;
 
             Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.grip, out var leftGrip);
-            _gripAvailable =
-                !_gripping && Vector3.Distance(leftHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
 
-            if (leftGrip > VRControls.TriggerDeadZone)
+            if (leftHold)
             {
-                if (_gripAvailable) _gripping = true;
+                if (leftGrip > VRControls.TriggerDeadZone)
+                {
+                    if (_gripAvailable) _gripping = true;
+                }
+                else
+                {
+                    _gripping = false;
+                }
+
+                _gripAvailable =
+                    !_gripping && Vector3.Distance(leftHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
             }
-            else
-            {
-                _gripping = false;
-            }
+            else _gripping = false;
 
             // look at left controller if gripping, or else just use the right controller rotation
             heldObject.gameObject.transform.rotation = _gripping
@@ -133,6 +138,7 @@ internal class KinematicsPatch
             heldObject.transform.position = toMove;
         }
         else
+
         {
             _gripping = false;
         }
