@@ -138,7 +138,6 @@ internal class KinematicsPatch
             heldObject.transform.position = toMove;
         }
         else
-
         {
             _gripping = false;
         }
