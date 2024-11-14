@@ -25,6 +25,14 @@ public class Plugin : BaseUnityPlugin
         Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
 
+#if DEBUG
+        Logger.LogInfo("Patched methods:");
+        foreach (var patchedMethod in harmony.GetPatchedMethods())
+        {
+            Logger.LogInfo(patchedMethod.DeclaringType?.ToString());
+        }
+#endif
+
         SceneManager.sceneLoaded += (_, _) => Controllers.Setup();
     }
 }
