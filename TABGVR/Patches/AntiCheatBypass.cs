@@ -15,7 +15,7 @@ public class AntiCheatBypass
         Harmony.CreateAndPatchAll(typeof(AntiCheatBypass), "com.redbigz.AntiCheatBypass");
 
         Plugin.Logger.LogInfo(
-            "Just so you know, bypassing the Anti-Cheat cuts you off from official servers. Matchmaking has been disabled for your safety.");
+            "Just so you know, bypassing the Anti-Cheat will cause issues on official servers. Matchmaking is strongly discouraged.");
     }
 
     /// <summary>
@@ -37,11 +37,10 @@ public class AntiCheatBypass
     ///     matchmaking process.
     /// </summary>
     [HarmonyPatch(typeof(MatchmakingHandler), nameof(MatchmakingHandler.StartSearch))]
-    [HarmonyPrefix]
-    private static bool StartSearch()
+    [HarmonyPostfix]
+    private static void StartSearch()
     {
         GlobalCanvasSingleton.Instance.UIMessageBox.QueueMessage(
-            "Matchmaking disabled due to Anti-Cheat safety. Please use a community server when playing TABGVR.");
-        return false;
+            "Just a heads-up, you *will* get kicked from official servers after a couple of seconds due to your Anti-Cheat not running. Matchmaking is strongly discouraged. Please play on community servers instead.");
     }
 }
