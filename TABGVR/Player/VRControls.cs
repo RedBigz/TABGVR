@@ -7,14 +7,15 @@ namespace TABGVR.Player;
 public class VRControls : MonoBehaviour
 {
     internal const float TriggerDeadZone = 0.7f;
+    internal const float StopSprintingThreshold = 0.1f;
 
     private bool _aButtonPressed;
     private bool _bButtonPressed;
-    private bool _leftTriggered;
-
-    private bool _rightTriggered;
     private bool _xButtonPressed;
     private bool _yButtonPressed;
+
+    private bool _leftTriggered;
+    private bool _rightTriggered;
 
     [CanBeNull] private Pickup currentPickup;
     private HaxInput haxInput;
