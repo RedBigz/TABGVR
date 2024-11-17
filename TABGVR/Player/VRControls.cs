@@ -100,13 +100,7 @@ public class VRControls : MonoBehaviour
         {
             if (!_rightTriggered)
             {
-                if (UIPorter.UIRightHand.GetComponent<XRRayInteractor>()
-                    .TryGetCurrentUIRaycastResult(out var uiRaycast))
-                {
-                    var handler = uiRaycast.gameObject.GetComponent<IPointerClickHandler>();
-                    handler?.OnPointerClick(new PointerEventData(EventSystem.current));
-                }
-                else if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
+                if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
                 else PickupInteract();
             }
             else if (weaponHandler.rightWeapon)
