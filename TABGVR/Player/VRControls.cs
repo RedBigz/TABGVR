@@ -1,6 +1,10 @@
 using JetBrains.Annotations;
+using Landfall.TABG.UI;
+using TABGVR.Util;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace TABGVR.Player;
 
@@ -16,6 +20,8 @@ public class VRControls : MonoBehaviour
 
     private bool _leftTriggered;
     private bool _rightTriggered;
+
+    private bool _menuButtonPressed;
 
     [CanBeNull] private Pickup currentPickup;
     private HaxInput haxInput;
@@ -44,6 +50,10 @@ public class VRControls : MonoBehaviour
 
     private void Update()
     {
+        // update interactor visibility
+        if (global::Player.usingInterface != UIPorter.InteractorVisuals)
+            UIPorter.InteractorVisuals = global::Player.usingInterface;
+
         if (movementHandler.death.dead) return;
 
         Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primary2DAxis, out var rightJoystick);
@@ -61,6 +71,26 @@ public class VRControls : MonoBehaviour
         Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out var rightClick);
         Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out var leftClick);
 
+        Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.menuButton, out var menuButtonPressed);
+
+        if (menuButtonPressed && !_menuButtonPressed)
+        {
+            var menuTransitions = InventoryUI.instance.gameObject.GetComponent<MenuTransitions>();
+
+            switch (MenuState.CurrentMenuState)
+            {
+                case MenuState.TABGMenuState.Main:
+                    menuTransitions.GoToEscape();
+                    break;
+                case MenuState.TABGMenuState.Escape:
+                case MenuState.TABGMenuState.Options:
+                    menuTransitions.GoToMain();
+                    break;
+            }
+        }
+
+        _menuButtonPressed = menuButtonPressed;
+
         if (leftClick && !inputHandler.isSpringting)
             inputHandler.isSpringting = true;
 
@@ -70,7 +100,13 @@ public class VRControls : MonoBehaviour
         {
             if (!_rightTriggered)
             {
-                if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
+                if (UIPorter.UIRightHand.GetComponent<XRRayInteractor>()
+                    .TryGetCurrentUIRaycastResult(out var uiRaycast))
+                {
+                    var handler = uiRaycast.gameObject.GetComponent<IPointerClickHandler>();
+                    handler?.OnPointerClick(new PointerEventData(EventSystem.current));
+                }
+                else if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
                 else PickupInteract();
             }
             else if (weaponHandler.rightWeapon)
@@ -108,6 +144,8 @@ public class VRControls : MonoBehaviour
             weaponHandler.rightWeapon?.gun.ReloadGun();
             weaponHandler.leftWeapon?.gun.ReloadGun();
         }
+
+        if (yButton && !_yButtonPressed) InventoryUI.ToggleInventoryState();
 
         _aButtonPressed = aButton;
         _bButtonPressed = bButton;

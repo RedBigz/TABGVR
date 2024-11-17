@@ -2,18 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace TABGVR.Player;
 
 public static class Controllers
 {
     public static GameObject LeftHand, RightHand, Head;
-
+    public static Floor VRFloor;
 
     /// <summary>
     ///     <see cref="InputDevice" />s of each hand.
     /// </summary>
     public static InputDevice LeftHandXR, RightHandXR;
+    
 
     /// <summary>
     ///     Left hand Vector3 in relative space.
@@ -35,6 +37,8 @@ public static class Controllers
         Head = new GameObject("TABGVR_HMD");
         LeftHand = new GameObject("TABGVR_LeftHand");
         RightHand = new GameObject("TABGVR_RightHand");
+        
+        VRFloor = new GameObject("Floor").AddComponent<Floor>(); // For UI tracking
 
         var headDriver = Head.AddComponent<TrackedPoseDriver>();
         headDriver.deviceType = TrackedPoseDriver.DeviceType.GenericXRDevice;
