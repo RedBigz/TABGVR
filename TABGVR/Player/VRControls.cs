@@ -1,10 +1,8 @@
+using System;
 using JetBrains.Annotations;
-using Landfall.TABG.UI;
 using TABGVR.Util;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.XR;
-using UnityEngine.XR.Interaction.Toolkit;
 
 namespace TABGVR.Player;
 
@@ -12,6 +10,7 @@ public class VRControls : MonoBehaviour
 {
     internal const float TriggerDeadZone = 0.7f;
     internal const float StopSprintingThreshold = 0.1f;
+    internal const float SwapWeaponThreshold = 0.8f;
 
     private bool _aButtonPressed;
     private bool _bButtonPressed;
@@ -22,6 +21,9 @@ public class VRControls : MonoBehaviour
     private bool _rightTriggered;
 
     private bool _menuButtonPressed;
+
+    private bool _weaponUpPressed;
+    private bool _weaponDownPressed;
 
     [CanBeNull] private Pickup currentPickup;
     private HaxInput haxInput;
@@ -46,6 +48,30 @@ public class VRControls : MonoBehaviour
         interactionHandler.canPickUpAction = pickup => currentPickup = pickup;
 
         inputHandler.enabled = false;
+    }
+
+    private void SwapWeaponViaOffset(int offset)
+    {
+        if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.ThrowableSlot) return; // TODO: Implement grenades
+
+        if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.None)
+        {
+            weaponHandler.CurrentWeapon = offset >= 0
+                ? Pickup.EquipSlots.WeaponSlot01
+                : Pickup.EquipSlots.WeaponSlot03;
+            
+            return;
+        }
+        
+        for (var i = 0; i < MathUtil.CanonicalMod(offset, 3); i++)
+        {
+            weaponHandler.CurrentWeapon = weaponHandler.CurrentWeapon switch
+            {
+                Pickup.EquipSlots.WeaponSlot01 => Pickup.EquipSlots.WeaponSlot02,
+                Pickup.EquipSlots.WeaponSlot02 => Pickup.EquipSlots.WeaponSlot03,
+                Pickup.EquipSlots.WeaponSlot03 => Pickup.EquipSlots.WeaponSlot01,
+            };
+        }
     }
 
     private void Update()
@@ -73,6 +99,7 @@ public class VRControls : MonoBehaviour
 
         Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.menuButton, out var menuButtonPressed);
 
+        // Menu
         if (menuButtonPressed && !_menuButtonPressed)
         {
             var menuTransitions = InventoryUI.instance.gameObject.GetComponent<MenuTransitions>();
@@ -91,11 +118,13 @@ public class VRControls : MonoBehaviour
 
         _menuButtonPressed = menuButtonPressed;
 
+        // Sprinting
         if (leftClick && !inputHandler.isSpringting)
             inputHandler.isSpringting = true;
 
         inputHandler.isSpringting &= leftJoystick.magnitude > StopSprintingThreshold;
 
+        // Right Trigger
         if (rightTrigger > TriggerDeadZone)
         {
             if (!_rightTriggered)
@@ -109,6 +138,7 @@ public class VRControls : MonoBehaviour
             }
         }
 
+        // Left Trigger
         if (leftTrigger > TriggerDeadZone)
         {
             if (!_leftTriggered)
@@ -125,6 +155,7 @@ public class VRControls : MonoBehaviour
         _rightTriggered = rightTrigger > TriggerDeadZone;
         _leftTriggered = leftTrigger > TriggerDeadZone;
 
+        // Right Click
         if (rightClick)
             weaponHandler.CurrentWeapon = Pickup.EquipSlots.None;
 
@@ -145,6 +176,15 @@ public class VRControls : MonoBehaviour
         _bButtonPressed = bButton;
         _xButtonPressed = xButton;
         _yButtonPressed = yButton;
+
+        var weaponUpPressed = rightJoystick.y >= SwapWeaponThreshold;
+        var weaponDownPressed = rightJoystick.y <= -SwapWeaponThreshold;
+        
+        if (weaponUpPressed && !_weaponUpPressed) SwapWeaponViaOffset(-1);
+        if (weaponDownPressed && !_weaponDownPressed) SwapWeaponViaOffset(1);
+
+        _weaponUpPressed = weaponUpPressed;
+        _weaponDownPressed = weaponDownPressed;
     }
 
     /// <summary>
