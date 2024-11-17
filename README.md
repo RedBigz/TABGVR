@@ -2,7 +2,9 @@
 ![Shooting Test](img/shoot_test.gif)
 
 ## Installation
-[Refer to the Setup Guide for installation Instructions.](SETUP.md)
+[Refer to the Setup Guide for installation instructions.](SETUP.md)
+
+[Alternatively, refer to the Compiling Guide for compilation instructions.](COMPILING.md)
 
 ## Controller Layout
 ![Controller Layout](auxillary/controller_layout.svg)
