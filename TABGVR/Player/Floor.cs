@@ -9,6 +9,7 @@ public class Floor : MonoBehaviour
 {
     public void Update()
     {
+        if (Camera.current is null) return;
         transform.position = Camera.current.transform.position - Controllers.Head.transform.position;
     }
 }
