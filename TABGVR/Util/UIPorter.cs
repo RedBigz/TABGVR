@@ -17,7 +17,7 @@ internal static class UIPorter
 
     internal static GameObject UILeftHand;
     internal static GameObject UIRightHand;
-    
+
     [CanBeNull] private static XRInteractorLineVisual _uiLeftHandVisual;
     [CanBeNull] private static XRInteractorLineVisual _uiRightHandVisual;
 
@@ -33,19 +33,19 @@ internal static class UIPorter
         set
         {
             if (_uiLeftHandVisual is null || _uiRightHandVisual is null) return;
-            
+
             _uiLeftHandVisual.enabled = value;
             _uiRightHandVisual.enabled = value;
         }
     }
-    
+
     internal static void SetupInteractors(XRNode node)
     {
         if (UILeftHand && node == XRNode.LeftHand) return;
         if (UIRightHand && node == XRNode.RightHand) return;
 
         GameObject interactionController;
-        
+
         switch (node)
         {
             case XRNode.LeftHand:
@@ -95,11 +95,11 @@ internal static class UIPorter
                     new GradientColorKey(Color.white, 1)
                 }
         };
-        
+
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
 
         controller.controllerNode = node;
-        
+
         interactionController.transform.SetParent(Controllers.VRFloor.transform, false);
         // InteractorMover.Interactors.Add(interactor);
     }
@@ -108,7 +108,7 @@ internal static class UIPorter
     {
         if (_eventSystemSetUp) return;
 
-        var eventSystem = SceneManager.GetActiveScene().GetRootGameObjects().First((o => o.name == "MapObjects"))
+        var eventSystem = SceneManager.GetActiveScene().GetRootGameObjects().First(o => o.name == (SceneManager.GetActiveScene().name == "MainMenu" ? "NetworkClientMenu" : "MapObjects"))
             .transform.Find("EventSystem").gameObject;
 
         eventSystem.AddComponent<XRUIInputModule>();
@@ -119,6 +119,8 @@ internal static class UIPorter
 
     internal static void SetupCanvas(GameObject canvas)
     {
+        canvas.layer = LayerMask.NameToLayer("Default");
+        
         var canvasComponent = canvas.GetComponent<Canvas>();
         canvasComponent.renderMode = RenderMode.WorldSpace;
         canvasComponent.worldCamera = Camera.main;
@@ -126,8 +128,9 @@ internal static class UIPorter
         var rectTransform = canvas.GetComponent<RectTransform>();
         rectTransform.localPosition = Vector3.zero;
         rectTransform.localRotation = Quaternion.identity;
-        rectTransform.localScale = Vector3.one * 0.0008f; // i don't know why this specific number works, but it does ¯\_(ツ)_/¯
-        
+        rectTransform.localScale =
+            Vector3.one * 0.0008f; // i don't know why this specific number works, but it does ¯\_(ツ)_/¯
+
         canvas.AddComponent<TrackedDeviceGraphicRaycaster>();
     }
 

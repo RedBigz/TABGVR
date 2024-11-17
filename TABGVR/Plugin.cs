@@ -3,6 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using TABGVR.Patches;
 using TABGVR.Player;
+using TABGVR.Util;
 using UnityEngine.SceneManagement;
 
 namespace TABGVR;
@@ -34,5 +35,10 @@ public class Plugin : BaseUnityPlugin
 #endif
 
         SceneManager.sceneLoaded += (_, _) => Controllers.Setup();
+        SceneManager.sceneUnloaded += (_) =>
+        {
+            UIPorter.UILeftHand = null;
+            UIPorter.UIRightHand = null;
+        };
     }
 }
