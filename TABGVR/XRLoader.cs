@@ -25,8 +25,10 @@ public static class XRLoader
 
         generalSettings.Manager = managerSettings;
 
+#pragma warning disable CS0618 // Type or member is obsolete
         managerSettings.loaders.Clear();
         managerSettings.loaders.Add(xrLoader);
+#pragma warning restore CS0618
 
         var oculusTouch = ScriptableObject.CreateInstance<OculusTouchControllerProfile>();
 
