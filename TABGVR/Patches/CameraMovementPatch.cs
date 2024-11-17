@@ -13,8 +13,6 @@ public class CameraMovementPatch
     [HarmonyTranspiler]
     public static IEnumerable<CodeInstruction> LateUpdate(IEnumerable<CodeInstruction> instructions)
     {
-        var instructionsList = instructions.ToArray();
-
         foreach (var instruction in instructions.Select((value, i) => new { i, value }))
         {
             // instruction.value.opcode == OpCodes.Ldarg_0 &&
