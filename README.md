@@ -1,4 +1,5 @@
 # TABG VR
+### [ENG](README.md) | [РУС](README_RU.md)
 ![Shooting Test](img/shoot_test.gif)
 
 ## Installation
