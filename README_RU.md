@@ -1,5 +1,6 @@
 # TABG VR
-### [ENG](README.md) | [РУС](README_RU.md)
+[[ENG](README.md) | РУС]
+
 ![Тест стрельбы](img/shoot_test.gif)
 
 ## Установка
