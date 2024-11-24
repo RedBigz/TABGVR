@@ -31,4 +31,4 @@ It's fairly simple to run the mod through Steam. Just add this to your launch op
 ## Reporting Bugs
 If you encounter issues, feel free to create an [issue](https://github.com/RedBigz/TABGVR/issues).
 
-*Enjoy TABG VR!*
+*Enjoy TABG VR! :3*
