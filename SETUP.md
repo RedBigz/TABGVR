@@ -12,14 +12,14 @@ Head over [here](https://github.com/RedBigz/TABGVR/actions) to select an artifac
 All you need to do to set up TABGVR is to download the artifact at the bottom page and drag the contents into the root of your TABG folder.
 
 ## Running the Game
-Running the game through Steam will cause the game to run the EAC launcher, causing a crash and an untrusted file error. There are many ways of bypassing the launcher, and these will be detailed here:
+Outright running the game through Steam will cause the game to run the EAC launcher, causing a crash and an untrusted file error. There are many ways of bypassing the launcher, and these will be detailed here:
 
 ### Running directly from the Game Folder
 If there isn't one in the folder, create a `steam_appid.txt` file with `823130` in it.
 Then, just run `TotallyAccurateBattlegrounds.exe` straight from File Explorer, or make a shortcut to it.
 
-### Running through Steam
-It's fairly simple to run the mod through Steam. Just add this to your launch options:
+### Running through Steam using launch options
+Just add this to your launch options:
 ```
 "<steam library folder>\steamapps\common\TotallyAccurateBattlegrounds\TotallyAccurateBattlegrounds.exe" %command% <your other launch options here>
 ```
@@ -29,6 +29,6 @@ It's fairly simple to run the mod through Steam. Just add this to your launch op
 ```
 
 ## Reporting Bugs
-If you encounter issues, feel free to create an [issue](https://github.com/RedBigz/TABGVR/issues).
+If you encounter any issues, feel free to create an [issue](https://github.com/RedBigz/TABGVR/issues).
 
 *Enjoy TABG VR! :3*
