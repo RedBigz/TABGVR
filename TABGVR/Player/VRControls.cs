@@ -159,7 +159,6 @@ public class VRControls : MonoBehaviour
         _leftTriggered = leftTrigger > TriggerDeadZone;
         
         SomethingTriggered = rightTrigger > 0.1 || leftTrigger > 0.1;
-        Plugin.Logger.LogInfo($"SURVEY SAYS: {SomethingTriggered}");
 
         // Right Click
         if (rightClick)
