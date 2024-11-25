@@ -29,14 +29,22 @@ public static class Controllers
     public static Vector3 RightHandFromGameCamera =>
         RightHand.transform.position - Head.transform.position + Camera.current.transform.position;
 
+    public static GameObject SnapTurnParent;
+
     /// <summary>
     ///     Sets up VR Controllers.
     /// </summary>
     public static void Setup()
     {
+        SnapTurnParent = new GameObject("SnapTurnParent");
+        
         Head = new GameObject("TABGVR_HMD");
         LeftHand = new GameObject("TABGVR_LeftHand");
         RightHand = new GameObject("TABGVR_RightHand");
+        
+        Head.transform.parent = SnapTurnParent.transform;
+        RightHand.transform.parent = SnapTurnParent.transform;
+        LeftHand.transform.parent = SnapTurnParent.transform;
         
         VRFloor = new GameObject("Floor").AddComponent<Floor>(); // For UI tracking
 

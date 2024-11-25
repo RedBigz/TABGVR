@@ -27,6 +27,9 @@ public class VRControls : MonoBehaviour
 
     private bool _weaponUpPressed;
     private bool _weaponDownPressed;
+    
+    private bool _snapRightPressed;
+    private bool _snapLeftPressed;
 
     [CanBeNull] private Pickup currentPickup;
     private HaxInput haxInput;
@@ -181,6 +184,8 @@ public class VRControls : MonoBehaviour
         _bButtonPressed = bButton;
         _xButtonPressed = xButton;
         _yButtonPressed = yButton;
+        
+        // Weapon Swapping
 
         var weaponUpPressed = rightJoystick.y >= SwapWeaponThreshold;
         var weaponDownPressed = rightJoystick.y <= -SwapWeaponThreshold;
@@ -190,6 +195,23 @@ public class VRControls : MonoBehaviour
 
         _weaponUpPressed = weaponUpPressed;
         _weaponDownPressed = weaponDownPressed;
+        
+        // Snap Turning
+
+        var snapRightPressed = rightJoystick.x >= SwapWeaponThreshold;
+        var snapLeftPressed = rightJoystick.x <= -SwapWeaponThreshold;
+
+        if (snapRightPressed && !_snapRightPressed) SnapTurn(1);
+        if (snapLeftPressed && !_snapLeftPressed) SnapTurn(-1);
+        
+        _snapRightPressed = snapRightPressed;
+        _snapLeftPressed = snapLeftPressed;
+    }
+
+    private void SnapTurn(int direction)
+    {
+        Controllers.SnapTurnParent.transform.Rotate(Vector3.up, direction * 45);
+        player.m_cameraMovement.transform.Rotate(Vector3.up, direction * 45);
     }
 
     /// <summary>

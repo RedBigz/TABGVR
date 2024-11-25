@@ -11,4 +11,4 @@
 ## Controller Layout
 ![Controller Layout](auxillary/controller_layout.svg)
 
-(NOTE: Snap Turn, Grenades, and Fire Mode are not implemented yet!)
+(NOTE: Grenades and Fire Mode are not implemented yet!)
