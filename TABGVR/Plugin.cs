@@ -6,6 +6,10 @@ using TABGVR.Player;
 using TABGVR.Util;
 using UnityEngine.SceneManagement;
 
+#if DEBUG
+using HarmonyLib.Tools;
+#endif
+
 namespace TABGVR;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
@@ -27,6 +31,8 @@ public class Plugin : BaseUnityPlugin
         harmony.PatchAll();
 
 #if DEBUG
+        HarmonyFileLog.Enabled = true;
+
         Logger.LogInfo("Patched methods:");
         foreach (var patchedMethod in harmony.GetPatchedMethods())
         {
