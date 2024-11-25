@@ -20,6 +20,9 @@ public class VRControls : MonoBehaviour
     private bool _leftTriggered;
     private bool _rightTriggered;
 
+    public static bool SomethingTriggered;
+    public static bool GetSomethingTriggered() => SomethingTriggered;
+
     private bool _menuButtonPressed;
 
     private bool _weaponUpPressed;
@@ -154,6 +157,9 @@ public class VRControls : MonoBehaviour
 
         _rightTriggered = rightTrigger > TriggerDeadZone;
         _leftTriggered = leftTrigger > TriggerDeadZone;
+        
+        SomethingTriggered = rightTrigger > 0.1 || leftTrigger > 0.1;
+        Plugin.Logger.LogInfo($"SURVEY SAYS: {SomethingTriggered}");
 
         // Right Click
         if (rightClick)
