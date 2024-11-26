@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using Landfall.Network;
 using TABGVR.Util;
 using UnityEngine;
 using UnityEngine.XR;
@@ -183,7 +184,14 @@ public class VRControls : MonoBehaviour
         }
 
         if (yButton && !_yButtonPressed) InventoryUI.ToggleInventoryState();
-
+        if (xButton && !_xButtonPressed)
+        {
+            var activeSelf = mapHandler.images.activeSelf;
+            
+            MapHandler.isMiniMap = !activeSelf;
+            mapHandler.images.SetActive(!activeSelf);
+        }
+        
         _aButtonPressed = aButton;
         _bButtonPressed = bButton;
         _xButtonPressed = xButton;
