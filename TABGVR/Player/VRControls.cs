@@ -39,6 +39,9 @@ public class VRControls : MonoBehaviour
     private global::Player player;
     private Transform rotationX;
     private WeaponHandler weaponHandler;
+    
+    private MenuTransitions menuTransitions;
+    private MapHandler mapHandler;
 
     private void Start()
     {
@@ -54,6 +57,9 @@ public class VRControls : MonoBehaviour
         interactionHandler.canPickUpAction = pickup => currentPickup = pickup;
 
         inputHandler.enabled = false;
+        
+        menuTransitions = InventoryUI.instance.gameObject.GetComponent<MenuTransitions>();
+        mapHandler = InventoryUI.instance.gameObject.GetComponentInChildren<MapHandler>();
     }
 
     private void SwapWeaponViaOffset(int offset)
@@ -108,8 +114,6 @@ public class VRControls : MonoBehaviour
         // Menu
         if (menuButtonPressed && !_menuButtonPressed)
         {
-            var menuTransitions = InventoryUI.instance.gameObject.GetComponent<MenuTransitions>();
-
             switch (MenuState.CurrentMenuState)
             {
                 case MenuState.TABGMenuState.Main:
