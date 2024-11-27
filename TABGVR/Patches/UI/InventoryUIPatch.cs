@@ -35,6 +35,11 @@ public static class InventoryUIPatch
         gameUI.AddComponent<RectMask2D>(); // hide stuff that's normally offscreen
         UIPorter.Shebang(gameUI);
         
+        // *screen space canvas*
+        var ssc = __instance.transform.Find("ScreenSpaceCanvas").Find("Canvas").gameObject;
+        ssc.AddComponent<RectMask2D>();
+        UIPorter.Shebang(ssc);
+        
         return true;
     }
 }

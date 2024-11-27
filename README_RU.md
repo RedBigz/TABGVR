@@ -1,5 +1,6 @@
 # TABG VR
-### [ENG](README.md) | [РУС](README_RU.md)
+[[ENG](README.md) | РУС]
+
 ![Тест стрельбы](img/shoot_test.gif)
 
 ## Установка
@@ -8,6 +9,6 @@
 [Также см. Руководство по компиляции для инструкций по компиляции](COMPILING_RU.md)
 
 ## Раскладка контроллера
-![Controller Layout](auxillary/controller_layout.svg)
+![Controller Layout](auxillary/controller_layout_ru.svg)
 
-(Прим. Резкий поворот, гранаты и режим огня ещё не реализованы!)
+(Прим. гранаты ещё не реализованы!)

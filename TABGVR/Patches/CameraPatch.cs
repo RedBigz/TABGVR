@@ -30,7 +30,7 @@ public class CameraPatch
         {
             transform =
             {
-                parent = playerManager.playerRoot.transform.Find("CameraMovement"),
+                parent = playerManager.player.m_cameraMovement.transform,
                 position = __instance.transform.position
             },
             tag = "MainCamera",
