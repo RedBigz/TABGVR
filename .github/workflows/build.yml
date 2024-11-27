@@ -37,7 +37,8 @@ jobs:
           path: "./Template/*"
       - name: Set up TABGVR.Server Build Environment
         run: |
-          mkdir ManagedDS
+          cp -r Managed ManagedDS
+          rm ManagedDS/Assembly-CSharp-firstpass.dll
           curl -o ./ManagedDS/Assembly-CSharp.dll https://redbigz.com/lfs/TABG/Assembly-CSharp.stripped.dll
           curl -o ./ManagedDS/UnityEngine.CoreModule.dll https://redbigz.com/lfs/TABG/UnityEngine.CoreModule.dll
       - name: Build TABGVR.Server (CitrusLib)
