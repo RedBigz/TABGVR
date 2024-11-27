@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
@@ -24,12 +26,29 @@ jobs:
           
           mkdir GameReferences
           cp Template/TABGVR/core/* GameReferences # works well enough
-      - name: Build Solution
-        run: dotnet build -c release -p:TABGManaged=$(pwd)/Managed
-      - name: Copy Binary to Template
+      - name: Build TABGVR (Client)
+        working-directory: "./TABGVR"
+        run: dotnet build -c release -p:TABGManaged=$(pwd)/../Managed
+      - name: Copy Binary to Client Template
         run: cp ./TABGVR/bin/Release/netstandard2.1/TABGVR.dll Template/TABGVR/plugins
-      - name: Upload Artifact
+      - name: Upload Client Artifact
         uses: actions/upload-artifact@v4
         with:
           name: TABGVR
           path: "./Template/*"
+      - name: Build TABGVR.Server (CitrusLib)
+        working-directory: "./TABGVR.Server"
+        run: dotnet build -c release -p:TABGManaged=$(pwd)/../Managed -p:PluginTarget="Citrus"
+      - name: Upload TABGVR.Server (CitrusLib)
+        uses: actions/upload-artifact@v4
+        with:
+          name: TABGVR.Server (CitrusLib)
+          path: "./TABGVR.Server/bin/Release/netstandard2.1/TABGVR.Server.dll"
+      - name: Build TABGVR.Server (TASM)
+        working-directory: "./TABGVR.Server"
+        run: dotnet build -c release -p:TABGManaged=$(pwd)/../Managed -p:PluginTarget="TASM"
+      - name: Upload TABGVR.Server (CitrusLib)
+        uses: actions/upload-artifact@v4
+        with:
+          name: TABGVR.Server (TASM)
+          path: "./TABGVR.Server/bin/Release/netstandard2.1/TABGVR.Server.dll"

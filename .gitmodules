@@ -1,0 +1,6 @@
+[submodule "TABGVR.Server/Citruslib"]
+	path = TABGVR.Server/Citruslib
+	url = https://github.com/RedBigz/Citruslib-FixedUp
+[submodule "TABGVR.Server/TASM"]
+	path = TABGVR.Server/TASM
+	url = https://github.com/RedBigz/TASM

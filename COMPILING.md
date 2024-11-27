@@ -9,7 +9,7 @@ You will need:
 ## Cloning the repository
 Run:
 ```shell
-git clone https://github.com/RedBigz/TABGVR
+git clone https://github.com/RedBigz/TABGVR --recurse-submodules
 ```
 
 ## Gathering Required Files

@@ -9,7 +9,7 @@
 ## Клонирование
 Пропишите:
 ```shell
-git clone https://github.com/RedBigz/TABGVR
+git clone https://github.com/RedBigz/TABGVR --recurse-submodules
 ```
 
 ## Сборка нужных файлов
