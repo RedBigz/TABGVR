@@ -35,15 +35,20 @@ jobs:
         with:
           name: TABGVR
           path: "./Template/*"
+      - name: Set up TABGVR.Server build environment
+        run: |
+          mkdir ManagedDS
+          curl -o ./ManagedDS/Assembly-CSharp.dll https://redbigz.com/lfs/TABG/Assembly-CSharp.stripped.dll
+          curl -o ./ManagedDS/UnityEngine.CoreModule.dll https://redbigz.com/lfs/TABG/UnityEngine.CoreModule.dll
       - name: Build TABGVR.Server (CitrusLib)
-        run: dotnet build -c release -p:TABGManaged=$(pwd)/../Managed -p:PluginTarget="Citrus" ./TABGVR.Server
+        run: dotnet build -c release -p:TABGManaged=$(pwd)/../ManagedDS -p:PluginTarget="Citrus" ./TABGVR.Server
       - name: Upload TABGVR.Server (CitrusLib)
         uses: actions/upload-artifact@v4
         with:
           name: TABGVR.Server (CitrusLib)
           path: "./TABGVR.Server/bin/Release/netstandard2.1/TABGVR.Server.dll"
       - name: Build TABGVR.Server (TASM)
-        run: dotnet build -c release -p:TABGManaged=$(pwd)/../Managed -p:PluginTarget="TASM" ./TABGVR.Server
+        run: dotnet build -c release -p:TABGManaged=$(pwd)/../ManagedDS -p:PluginTarget="TASM" ./TABGVR.Server
       - name: Upload TABGVR.Server (CitrusLib)
         uses: actions/upload-artifact@v4
         with:
