@@ -31,13 +31,14 @@ public static class XRLoader
 #pragma warning restore CS0618
 
         var oculusTouch = ScriptableObject.CreateInstance<OculusTouchControllerProfile>();
+        var indexSupport = ScriptableObject.CreateInstance<ValveIndexControllerProfile>();
+        var viveSupport = ScriptableObject.CreateInstance<HTCViveControllerProfile>();
 
         oculusTouch.enabled = true;
+        indexSupport.enabled = true;
+        viveSupport.enabled = true;
 
-        OpenXRSettings.Instance.features = new List<OpenXRFeature>
-        {
-            oculusTouch
-        }.ToArray();
+        OpenXRSettings.Instance.features = [oculusTouch, indexSupport, viveSupport];
 
         XRGeneralSettings.AttemptInitializeXRSDKOnLoad();
         XRGeneralSettings.AttemptStartXRSDKOnBeforeSplashScreen();
