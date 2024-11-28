@@ -37,10 +37,8 @@ jobs:
           path: "./Template/*"
       - name: Set up TABGVR.Server Build Environment
         run: |
-          cp -r Managed ManagedDS
-          rm ManagedDS/Assembly-CSharp-firstpass.dll
-          curl -o ./ManagedDS/Assembly-CSharp.dll https://redbigz.com/lfs/TABG/Assembly-CSharp.stripped.dll
-          curl -o ./ManagedDS/UnityEngine.CoreModule.dll https://redbigz.com/lfs/TABG/UnityEngine.CoreModule.dll
+          mkdir ManagedDS
+          curl https://redbigz.com/lfs/tabgds.tar | tar -x -C ManagedDS
       - name: Build TABGVR.Server (CitrusLib)
         run: dotnet build -c Release -p:TABGManaged=$(pwd)/ManagedDS -p:PluginTarget="Citrus" ./TABGVR.Server/TABGVR.Server.csproj
       - name: Upload TABGVR.Server (CitrusLib)
