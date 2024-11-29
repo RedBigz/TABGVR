@@ -65,7 +65,7 @@ public class VRControls : MonoBehaviour
 
     private void SwapWeaponViaOffset(int offset)
     {
-        if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.ThrowableSlot) return;
+        if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.ThrowableSlot) return; // TODO: Implement grenades
 
         if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.None)
         {
