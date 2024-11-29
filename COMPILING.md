@@ -2,7 +2,7 @@
 
 ## Prerequisites
 You will need:
-- [.NET SDK 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+- [.NET SDK 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - [Git](https://git-scm.com/)
 - Basic terminal skills
 
