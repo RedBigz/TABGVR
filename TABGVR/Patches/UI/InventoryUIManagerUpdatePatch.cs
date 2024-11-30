@@ -11,7 +11,7 @@ namespace TABGVR.Patches.UI;
 public class InventoryUIManagerUpdatePatch
 {
     /// <summary>
-    /// Replaces <c>this.isDragging = Input.GetMouseButton(0);</c> to <c>this.isDragging = VRControls.GetSomethingTriggered()</c>.
+    /// Replaces <c>this.isDragging = Input.GetMouseButton(0);</c> with <c>this.isDragging = VRControls.GetSomethingTriggered()</c>.
     /// </summary>
     /// <param name="instructions"></param>
     /// <returns></returns>
