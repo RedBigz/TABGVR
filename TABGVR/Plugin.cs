@@ -28,8 +28,7 @@ public class Plugin : BaseUnityPlugin
         XRLoader.LoadXR();
 
         Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
-        harmony.PatchAll();
-
+        
 #if DEBUG
         HarmonyFileLog.Enabled = true;
 
@@ -39,6 +38,8 @@ public class Plugin : BaseUnityPlugin
             Logger.LogInfo(patchedMethod.DeclaringType?.ToString());
         }
 #endif
+        
+        harmony.PatchAll();
 
         SceneManager.sceneLoaded += (_, _) => Controllers.Setup();
         SceneManager.sceneUnloaded += (_) =>
