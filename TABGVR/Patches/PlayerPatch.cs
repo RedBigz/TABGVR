@@ -8,6 +8,8 @@ namespace TABGVR.Patches;
 [HarmonyPatch(typeof(global::Player))]
 public class PlayerPatch
 {
+    public static VRControls CurrentVRControls;
+    
     private static Transform _rotationTarget;
     private static PlayerManager _playerManager;
 
@@ -34,6 +36,6 @@ public class PlayerPatch
         playerDriver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
         playerDriver.poseSource = TrackedPoseDriver.TrackedPose.Head;
 
-        _playerManager.playerRoot.AddComponent<VRControls>();
+        CurrentVRControls = _playerManager.playerRoot.AddComponent<VRControls>();
     }
 }

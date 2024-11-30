@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using JetBrains.Annotations;
+using TABGVR.Patches;
 using TABGVR.Player;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,8 +19,27 @@ internal static class UIPorter
     internal static GameObject UILeftHand;
     internal static GameObject UIRightHand;
 
+    internal static XRRayInteractor UILeftHandInteractor;
+    internal static XRRayInteractor UIRightHandInteractor;
+
     [CanBeNull] private static XRInteractorLineVisual _uiLeftHandVisual;
     [CanBeNull] private static XRInteractorLineVisual _uiRightHandVisual;
+
+    internal static Vector2 DragPosition
+    {
+        get
+        {
+            RaycastResult hit;
+
+            if (PlayerPatch.CurrentVRControls._rightTriggered)
+                UIRightHandInteractor.TryGetCurrentUIRaycastResult(out hit);
+            else if (PlayerPatch.CurrentVRControls._leftTriggered)
+                UILeftHandInteractor.TryGetCurrentUIRaycastResult(out hit);
+            else return Vector2.zero;
+
+            return hit.screenPosition;
+        }
+    }
 
     internal static bool InteractorVisuals
     {
@@ -69,9 +89,11 @@ internal static class UIPorter
         {
             case XRNode.LeftHand:
                 _uiLeftHandVisual = lineVisual;
+                UILeftHandInteractor = interactor;
                 break;
             case XRNode.RightHand:
                 _uiRightHandVisual = lineVisual;
+                UIRightHandInteractor = interactor;
                 break;
         }
 
@@ -108,7 +130,8 @@ internal static class UIPorter
     {
         if (_eventSystemSetUp) return;
 
-        var eventSystem = SceneManager.GetActiveScene().GetRootGameObjects().First(o => o.name == (SceneManager.GetActiveScene().name == "MainMenu" ? "NetworkClientMenu" : "MapObjects"))
+        var eventSystem = SceneManager.GetActiveScene().GetRootGameObjects().First(o =>
+                o.name == (SceneManager.GetActiveScene().name == "MainMenu" ? "NetworkClientMenu" : "MapObjects"))
             .transform.Find("EventSystem").gameObject;
 
         eventSystem.AddComponent<XRUIInputModule>();
@@ -120,7 +143,7 @@ internal static class UIPorter
     internal static void SetupCanvas(GameObject canvas)
     {
         canvas.layer = LayerMask.NameToLayer("Default");
-        
+
         var canvasComponent = canvas.GetComponent<Canvas>();
         canvasComponent.renderMode = RenderMode.WorldSpace;
         canvasComponent.worldCamera = Camera.main;

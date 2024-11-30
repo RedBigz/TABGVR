@@ -13,24 +13,24 @@ public class VRControls : MonoBehaviour
     internal const float StopSprintingThreshold = 0.1f;
     internal const float SwapWeaponThreshold = 0.8f;
 
-    private bool _aButtonPressed;
-    private bool _bButtonPressed;
-    private bool _xButtonPressed;
-    private bool _yButtonPressed;
+    internal bool _aButtonPressed;
+    internal bool _bButtonPressed;
+    internal bool _xButtonPressed;
+    internal bool _yButtonPressed;
 
-    private bool _leftTriggered;
-    private bool _rightTriggered;
+    internal bool _leftTriggered;
+    internal bool _rightTriggered;
 
     public static bool SomethingTriggered;
     public static bool GetSomethingTriggered() => SomethingTriggered;
 
-    private bool _menuButtonPressed;
+    internal bool _menuButtonPressed;
 
-    private bool _weaponUpPressed;
-    private bool _weaponDownPressed;
+    internal bool _weaponUpPressed;
+    internal bool _weaponDownPressed;
     
-    private bool _snapRightPressed;
-    private bool _snapLeftPressed;
+    internal bool _snapRightPressed;
+    internal bool _snapLeftPressed;
 
     [CanBeNull] private Pickup currentPickup;
     private HaxInput haxInput;
