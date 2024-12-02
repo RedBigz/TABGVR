@@ -117,12 +117,12 @@ public class VRControls : MonoBehaviour
         {
             switch (MenuState.CurrentMenuState)
             {
-                case MenuState.TABGMenuState.Main:
-                    menuTransitions.GoToEscape();
-                    break;
                 case MenuState.TABGMenuState.Escape:
                 case MenuState.TABGMenuState.Options:
                     menuTransitions.GoToMain();
+                    break;
+                default:
+                    menuTransitions.GoToEscape();
                     break;
             }
         }
