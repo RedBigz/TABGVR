@@ -1,7 +1,12 @@
 # TABG VR
 [ENG | [РУС](README_RU.md)]
 
-![Shooting Test](img/shoot_test.gif)
+![Attachments](img/demos/attachments.gif)
+![M1A1 Thompson (ADS)](img/demos/m1a1_ads.gif)
+![Rocket Launcher (ADS)](img/demos/rocket_ads.gif)
+![MGL](img/demos/mgl_shoot.gif)
+
+[//]: # (![Shooting Test]&#40;img/demos/ak_shoot_old.gif&#41;)
 
 ## Installation
 [Refer to the Setup Guide for installation instructions.](SETUP.md)
