@@ -53,5 +53,7 @@ public static class XRLoader
 
         var myDisplay = displays[0];
         myDisplay.Start();
+        
+        XRSettings.gameViewRenderMode = GameViewRenderMode.RightEye;
     }
 }
