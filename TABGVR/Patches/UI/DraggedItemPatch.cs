@@ -9,7 +9,7 @@ using TABGVR.Util;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.UI;
 
 [HarmonyPatch(typeof(DraggedItem), nameof(DraggedItem.LateUpdate))]
 [HarmonyDebug]
