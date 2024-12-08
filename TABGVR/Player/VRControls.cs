@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 using Landfall.Network;
 using TABGVR.Util;
@@ -28,7 +27,7 @@ public class VRControls : MonoBehaviour
 
     internal bool _weaponUpPressed;
     internal bool _weaponDownPressed;
-    
+
     internal bool _snapRightPressed;
     internal bool _snapLeftPressed;
 
@@ -40,7 +39,7 @@ public class VRControls : MonoBehaviour
     private global::Player player;
     private Transform rotationX;
     private WeaponHandler weaponHandler;
-    
+
     private MenuTransitions menuTransitions;
     private MapHandler mapHandler;
 
@@ -58,7 +57,7 @@ public class VRControls : MonoBehaviour
         interactionHandler.canPickUpAction = pickup => currentPickup = pickup;
 
         inputHandler.enabled = false;
-        
+
         menuTransitions = InventoryUI.instance.gameObject.GetComponent<MenuTransitions>();
         mapHandler = InventoryUI.instance.gameObject.GetComponentInChildren<MapHandler>();
     }
@@ -72,10 +71,10 @@ public class VRControls : MonoBehaviour
             weaponHandler.CurrentWeapon = offset >= 0
                 ? Pickup.EquipSlots.WeaponSlot01
                 : Pickup.EquipSlots.WeaponSlot03;
-            
+
             return;
         }
-        
+
         for (var i = 0; i < MathUtil.CanonicalMod(offset, 3); i++)
         {
             weaponHandler.CurrentWeapon = weaponHandler.CurrentWeapon switch
@@ -165,7 +164,7 @@ public class VRControls : MonoBehaviour
 
         _rightTriggered = rightTrigger > TriggerDeadZone;
         _leftTriggered = leftTrigger > TriggerDeadZone;
-        
+
         SomethingTriggered = rightTrigger > 0.1 || leftTrigger > 0.1;
 
         // Right Click
@@ -187,27 +186,27 @@ public class VRControls : MonoBehaviour
         if (xButton && !_xButtonPressed)
         {
             var activeSelf = mapHandler.images.activeSelf;
-            
+
             MapHandler.isMiniMap = !activeSelf;
             mapHandler.images.SetActive(!activeSelf);
         }
-        
+
         _aButtonPressed = aButton;
         _bButtonPressed = bButton;
         _xButtonPressed = xButton;
         _yButtonPressed = yButton;
-        
+
         // Weapon Swapping
 
         var weaponUpPressed = rightJoystick.y >= SwapWeaponThreshold;
         var weaponDownPressed = rightJoystick.y <= -SwapWeaponThreshold;
-        
+
         if (weaponUpPressed && !_weaponUpPressed) SwapWeaponViaOffset(-1);
         if (weaponDownPressed && !_weaponDownPressed) SwapWeaponViaOffset(1);
 
         _weaponUpPressed = weaponUpPressed;
         _weaponDownPressed = weaponDownPressed;
-        
+
         // Snap Turning
 
         var snapRightPressed = rightJoystick.x >= SwapWeaponThreshold;
@@ -215,7 +214,7 @@ public class VRControls : MonoBehaviour
 
         if (snapRightPressed && !_snapRightPressed) SnapTurn(1);
         if (snapLeftPressed && !_snapLeftPressed) SnapTurn(-1);
-        
+
         _snapRightPressed = snapRightPressed;
         _snapLeftPressed = snapLeftPressed;
     }

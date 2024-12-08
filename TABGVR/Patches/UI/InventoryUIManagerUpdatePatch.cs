@@ -3,7 +3,6 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using Landfall.TABG.UI;
 using TABGVR.Player;
-using TABGVR.Util;
 
 namespace TABGVR.Patches.UI;
 

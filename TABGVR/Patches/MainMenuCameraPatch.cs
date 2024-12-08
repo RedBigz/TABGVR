@@ -2,7 +2,6 @@ using DeepSky.Haze;
 using HarmonyLib;
 using TABGVR.Player;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SpatialTracking;
 

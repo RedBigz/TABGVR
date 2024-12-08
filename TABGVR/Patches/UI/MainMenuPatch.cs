@@ -1,6 +1,5 @@
 using HarmonyLib;
 using Landfall.TABG.UI.MainMenu;
-using TABGVR.Player;
 using TABGVR.Util;
 using UnityEngine;
 using UnityEngine.UI;
