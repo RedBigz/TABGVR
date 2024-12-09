@@ -55,6 +55,7 @@ public class VRControls : MonoBehaviour
         haxInput = HaxInput.Instance;
 
         interactionHandler.canPickUpAction = pickup => currentPickup = pickup;
+        interactionHandler.canNotPickUpAction = () => currentPickup = null;
 
         inputHandler.enabled = false;
 
