@@ -60,7 +60,7 @@ internal class KinematicsPatch
     /// <param name="holding">Holding Script</param>
     private static void PositionLeftHandToHandguard(Holding holding)
     {
-        holding.leftHand.MovePosition(holding.leftHand.position + holding.heldObject.leftHandPos.position -
+        holding.leftHand.MovePosition(holding.leftHand.position + (holding.heldObject.leftHandPos ?? holding.heldObject.rightHandPos).position -
                                       holding.leftHand.transform.GetChild(0).position);
     }
 
@@ -102,24 +102,22 @@ internal class KinematicsPatch
 
             Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.grip, out var leftGrip);
 
-            if (leftHold)
-            {
-                if (leftGrip > VRControls.TriggerDeadZone)
-                {
-                    if (_gripAvailable) _gripping = true;
-                }
-                else
-                {
-                    _gripping = false;
-                }
+            var otherHold = leftHold ?? rightHold;
 
-                _gripAvailable =
-                    !_gripping && Vector3.Distance(leftHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
+            if (leftGrip > VRControls.TriggerDeadZone)
+            {
+                if (_gripAvailable) _gripping = true;
             }
-            else _gripping = false;
+            else
+            {
+                _gripping = false;
+            }
+
+            _gripAvailable =
+                !_gripping && Vector3.Distance(otherHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
 
             // look at left controller if gripping, or else just use the right controller rotation
-            heldObject.gameObject.transform.rotation = _gripping
+            heldObject.gameObject.transform.rotation = _gripping && leftHold
                 ? Quaternion.LookRotation(
                     Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
                 : Controllers.RightHand.transform.rotation *
