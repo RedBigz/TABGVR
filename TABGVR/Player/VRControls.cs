@@ -222,6 +222,7 @@ public class VRControls : MonoBehaviour
 
     private void SnapTurn(int direction)
     {
+        UIPorter.UISnapTurnBase?.transform.Rotate(Vector3.up, direction * 45);;
         Controllers.SnapTurnParent.transform.Rotate(Vector3.up, direction * 45);
         player.m_cameraMovement.transform.Rotate(Vector3.up, direction * 45);
     }

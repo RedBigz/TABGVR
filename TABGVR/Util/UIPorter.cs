@@ -16,6 +16,8 @@ internal static class UIPorter
 {
     private static bool _eventSystemSetUp;
 
+    [CanBeNull] internal static GameObject UISnapTurnBase;
+    
     internal static GameObject UILeftHand;
     internal static GameObject UIRightHand;
 
@@ -61,6 +63,12 @@ internal static class UIPorter
 
     internal static void SetupInteractors(XRNode node)
     {
+        if (!UISnapTurnBase)
+        {
+            UISnapTurnBase = new GameObject("TABGVR_UISnapTurnBase");
+            UISnapTurnBase.transform.SetParent(Controllers.VRFloor.transform, false);
+        }
+        
         if (UILeftHand && node == XRNode.LeftHand) return;
         if (UIRightHand && node == XRNode.RightHand) return;
 
@@ -79,6 +87,8 @@ internal static class UIPorter
             default:
                 throw new ArgumentOutOfRangeException(nameof(node), node, null);
         }
+        
+        interactionController.transform.SetParent(UISnapTurnBase.transform);
 
         var controller = interactionController.AddComponent<XRController>();
         var interactor = interactionController.AddComponent<XRRayInteractor>();
@@ -121,8 +131,6 @@ internal static class UIPorter
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
 
         controller.controllerNode = node;
-
-        interactionController.transform.SetParent(Controllers.VRFloor.transform, false);
         // InteractorMover.Interactors.Add(interactor);
     }
 
@@ -136,6 +144,8 @@ internal static class UIPorter
 
         eventSystem.AddComponent<XRUIInputModule>();
         eventSystem.GetComponent<StandaloneInputModule>().enabled = false;
+        
+        UISnapTurnBase = null; // remove UISnapTurnBase if there's already one
 
         _eventSystemSetUp = true;
     }
