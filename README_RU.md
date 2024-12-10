@@ -15,5 +15,3 @@
 
 ## Раскладка контроллера
 ![Controller Layout](auxillary/controller_layout_ru.svg)
-
-(Прим. гранаты ещё не реализованы!)

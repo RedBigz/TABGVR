@@ -15,5 +15,3 @@
 
 ## Controller Layout
 ![Controller Layout](auxillary/controller_layout.svg)
-
-(NOTE: Grenades are not implemented yet!)

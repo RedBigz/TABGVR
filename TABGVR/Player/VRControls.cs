@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Landfall.Network;
+using TABGVR.Player.Mundanities;
 using TABGVR.Util;
 using UnityEngine;
 using UnityEngine.XR;
@@ -30,6 +31,8 @@ public class VRControls : MonoBehaviour
 
     internal bool _snapRightPressed;
     internal bool _snapLeftPressed;
+    
+    internal bool _rightClickPressed;
 
     [CanBeNull] private Pickup currentPickup;
     private HaxInput haxInput;
@@ -39,6 +42,7 @@ public class VRControls : MonoBehaviour
     private global::Player player;
     private Transform rotationX;
     private WeaponHandler weaponHandler;
+    private Inventory inventory;
 
     private MenuTransitions menuTransitions;
     private MapHandler mapHandler;
@@ -50,6 +54,7 @@ public class VRControls : MonoBehaviour
         inputHandler = GetComponent<InputHandler>();
         interactionHandler = GetComponent<InteractionHandler>();
         player = GetComponent<global::Player>();
+        inventory = player.m_inventory;
         rotationX = gameObject.GetComponentInChildren<RotationTarget>().transform.parent;
 
         haxInput = HaxInput.Instance;
@@ -65,9 +70,7 @@ public class VRControls : MonoBehaviour
 
     private void SwapWeaponViaOffset(int offset)
     {
-        if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.ThrowableSlot) return; // TODO: Implement grenades
-
-        if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.None)
+        if (weaponHandler.CurrentWeapon is Pickup.EquipSlots.None or Pickup.EquipSlots.ThrowableSlot)
         {
             weaponHandler.CurrentWeapon = offset >= 0
                 ? Pickup.EquipSlots.WeaponSlot01
@@ -172,8 +175,23 @@ public class VRControls : MonoBehaviour
         SomethingTriggered = rightTrigger > 0.1 || leftTrigger > 0.1;
 
         // Right Click
-        if (rightClick)
-            weaponHandler.CurrentWeapon = Pickup.EquipSlots.None;
+        if (rightClick && !_rightClickPressed)
+        {
+            if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.ThrowableSlot)
+            {
+                foreach (var unused in inventory.GrenadeSlots)
+                {
+                    inventory.CurrentlySelectedGrenadeSlot =
+                        (inventory.CurrentlySelectedGrenadeSlot + 1) % inventory.GrenadeSlots.Length;
+
+                    if (inventory.GetGrenadeInSelectedSlot().Pickup) break;
+                }
+            }
+            
+            weaponHandler.CurrentWeapon = Pickup.EquipSlots.ThrowableSlot;
+        }
+        
+        _rightClickPressed = rightClick;
 
         var movementVector = new Vector3(leftJoystick.x, 0.0f, leftJoystick.y);
 
@@ -225,7 +243,7 @@ public class VRControls : MonoBehaviour
 
     private void SnapTurn(int direction)
     {
-        UIPorter.UISnapTurnBase?.transform.Rotate(Vector3.up, direction * 45);;
+        UIPorter.UISnapTurnBase?.transform.Rotate(Vector3.up, direction * 45);
         Controllers.SnapTurnParent.transform.Rotate(Vector3.up, direction * 45);
         player.m_cameraMovement.transform.Rotate(Vector3.up, direction * 45);
     }
