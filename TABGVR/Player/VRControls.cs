@@ -135,36 +135,39 @@ public class VRControls : MonoBehaviour
 
         inputHandler.isSpringting &= leftJoystick.magnitude > StopSprintingThreshold;
 
-        // Right Trigger
-        if (rightTrigger > TriggerDeadZone)
+        if (!global::Player.usingInterface)
         {
-            if (!_rightTriggered)
+            // Right Trigger
+            if (rightTrigger > TriggerDeadZone)
             {
-                if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
-                else PickupInteract();
+                if (!_rightTriggered)
+                {
+                    if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
+                    else PickupInteract();
+                }
+                else if (weaponHandler.rightWeapon)
+                {
+                    weaponHandler.HoldAttack(true, false);
+                }
             }
-            else if (weaponHandler.rightWeapon)
-            {
-                weaponHandler.HoldAttack(true, false);
-            }
-        }
 
-        // Left Trigger
-        if (leftTrigger > TriggerDeadZone)
-        {
-            if (!_leftTriggered)
+            // Left Trigger
+            if (leftTrigger > TriggerDeadZone)
             {
-                if (weaponHandler.leftWeapon) weaponHandler.PressAttack(false, false);
-                else PickupInteract();
+                if (!_leftTriggered)
+                {
+                    if (weaponHandler.leftWeapon) weaponHandler.PressAttack(false, false);
+                    else PickupInteract();
+                }
+                else if (weaponHandler.leftWeapon)
+                {
+                    weaponHandler.HoldAttack(false, false);
+                }
             }
-            else if (weaponHandler.leftWeapon)
-            {
-                weaponHandler.HoldAttack(false, false);
-            }
-        }
 
-        _rightTriggered = rightTrigger > TriggerDeadZone;
-        _leftTriggered = leftTrigger > TriggerDeadZone;
+            _rightTriggered = rightTrigger > TriggerDeadZone;
+            _leftTriggered = leftTrigger > TriggerDeadZone;
+        }
 
         SomethingTriggered = rightTrigger > 0.1 || leftTrigger > 0.1;
 
