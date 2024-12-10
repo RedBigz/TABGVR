@@ -145,7 +145,8 @@ public class VRControls : MonoBehaviour
             {
                 if (!_rightTriggered)
                 {
-                    if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
+                    if (Grenades.SelectedGrenade && interactionHandler.sinceThrow > 3f && !interactionHandler.isThrowing) interactionHandler.StartCoroutine(interactionHandler.Throwing());
+                    else if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
                     else PickupInteract();
                 }
                 else if (weaponHandler.rightWeapon)
