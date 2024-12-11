@@ -1,4 +1,8 @@
 # TABG VR
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/redbigz/TABGVR/build.yml?style=for-the-badge&logo=github)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/redbigz/TABGVR/total?style=for-the-badge&logo=github)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/redbigz/TABGVR?style=for-the-badge&logo=github)
+
 [[ENG](README.md) | РУС]
 
 ![Attachments](img/demos/attachments.gif)
