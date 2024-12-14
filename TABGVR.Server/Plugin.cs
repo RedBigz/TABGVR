@@ -33,6 +33,8 @@ public class Plugin
     private void Awake()
 #endif
     {
+        ConfigManager.LoadConfig();
+        
 #if CITRUSLIB
         // citrus init stuff
         ModLogger = new("TABGVR", ConsoleColor.Magenta);
