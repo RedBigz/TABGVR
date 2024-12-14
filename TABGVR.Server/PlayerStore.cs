@@ -14,6 +14,8 @@ public class PlayerStore
     public static PlayerStore? GetPlayerStore(byte playerIndex) =>
         Stores.ContainsKey(playerIndex) ? Stores[playerIndex] : null;
 
+    public Identification? Identification;
+
     public PlayerStore(TABGPlayerServer playerServer)
     {
         this.playerServer = playerServer;
