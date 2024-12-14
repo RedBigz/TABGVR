@@ -4,7 +4,7 @@ namespace TABGVR.Server;
 
 public class PlayerStore
 {
-    private readonly TABGPlayerServer playerServer;
+    public readonly TABGPlayerServer playerServer;
 
     public static Dictionary<byte, PlayerStore> Stores = new();
 
