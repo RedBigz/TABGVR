@@ -9,7 +9,7 @@ You will need:
 ## Cloning the repository
 Run:
 ```shell
-git clone https://github.com/RedBigz/TABGVR
+git clone https://github.com/RedBigz/TABGVR --recurse-submodules
 ```
 
 ## Gathering Required Files
@@ -77,7 +77,7 @@ In this folder, create a `UnitySubsystemsManifest.json` with these contents:
 You just need to build the mod as you would for a .NET project.
 
 ```shell
-dotnet build -c release
+dotnet build -c Release TABGVR/TABGVR.csproj
 ```
 *If you have installed TABG in a place other than your C:\ drive, append `-p:TABGFolder="<Your TABG directory>"` to the command.*
 

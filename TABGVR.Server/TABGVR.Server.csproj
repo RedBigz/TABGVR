@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>12.0</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    </PropertyGroup>
+
+    <!--  Custom Build Settings - to override add -p:key="value" to `dotnet build`  -->
+    <PropertyGroup>
+        <!--  Build target (TASM - Totally Accurate Server Mod, Citrus - CitrusLib)  -->
+        <PluginTarget>TASM</PluginTarget>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Your Server Folder -->
+        <TABGFolder>C:\Program Files (x86)\Steam\steamapps\common\TotallyAccurateBattlegroundsDedicatedServer</TABGFolder>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TABGManaged>$(TABGFolder)\TABG_Data\Managed</TABGManaged>
+    </PropertyGroup>
+
+    <!--  Build for BepInEx if using CitrusLib  -->
+
+    <PropertyGroup Condition="'$(PluginTarget)' == 'Citrus'">
+        <DefineConstants>$(DefineConstants);CITRUSLIB</DefineConstants>
+        
+        <RestoreAdditionalProjectSources>
+            https://api.nuget.org/v3/index.json;
+            https://nuget.bepinex.dev/v3/index.json;
+            https://nuget.samboy.dev/v3/index.json
+        </RestoreAdditionalProjectSources>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(PluginTarget)' == 'Citrus'">
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2"/>
+        <PackageReference Include="BepInEx.Core" Version="5.*"/>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*"/>
+        
+        <ProjectReference Include="Citruslib\Citruslib.csproj"/>
+    </ItemGroup>
+
+    <!--  Build for TASM if using TASM  -->
+
+    <PropertyGroup Condition="'$(PluginTarget)' == 'TASM'">
+        <DefineConstants>$(DefineConstants);TASM</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(PluginTarget)' == 'TASM'">
+        <PackageReference Include="Lib.Harmony" Version="2.3.3" />
+        
+        <ProjectReference Include="TASM\TASM.Common\TASM.Common.csproj"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="UnityEngine.Modules" Version="2021.3.22" IncludeAssets="compile"/>
+        
+        <Reference Include="$(TABGManaged)\Assembly-CSharp.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(TABGManaged)\Assembly-CSharp-firstpass.dll" Publicize="true" Private="false"/>
+
+        <Reference Include="$(TABGManaged)\Newtonsoft.Json.dll" Publicize="true" Private="false"/>
+        
+        <Compile Remove="Citruslib\**\*"/>
+        <Compile Remove="TASM\**\*"/>
+    </ItemGroup>
+
+</Project>

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABGVR", "TABGVR\TABGVR.csproj", "{8B464B50-2124-4C2D-9CA8-3324F49D8265}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABGVR.Server", "TABGVR.Server\TABGVR.Server.csproj", "{FFD931AC-6579-4E05-AE99-A208F476374C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{8B464B50-2124-4C2D-9CA8-3324F49D8265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B464B50-2124-4C2D-9CA8-3324F49D8265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B464B50-2124-4C2D-9CA8-3324F49D8265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD931AC-6579-4E05-AE99-A208F476374C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD931AC-6579-4E05-AE99-A208F476374C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD931AC-6579-4E05-AE99-A208F476374C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD931AC-6579-4E05-AE99-A208F476374C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

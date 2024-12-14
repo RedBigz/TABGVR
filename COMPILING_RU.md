@@ -9,7 +9,7 @@
 ## Клонирование
 Пропишите:
 ```shell
-git clone https://github.com/RedBigz/TABGVR
+git clone https://github.com/RedBigz/TABGVR --recurse-submodules
 ```
 
 ## Сборка нужных файлов
@@ -77,7 +77,7 @@ git clone https://github.com/RedBigz/TABGVR
 Вам нужно сбилдить проект так же, как вы бы сделали это в обычном .NET проекте.
 
 ```shell
-dotnet build -c release
+dotnet build -c Release TABGVR/TABGVR.csproj
 ```
 *Если TABG установлен у вас в месте, отличном от диска C:, добавьте `-p:TABGFolder="<Путь к TABG>"` к команде.*
 
