@@ -10,13 +10,6 @@ public enum PacketCodes : byte
      */
     Interrogate = 196,
     /*
-     * Tells client to assign VR components to a Player ID
-     *
-     * Server Request: byte playerIndex
-     * Client Response: Empty
-     */
-    Assign,
-    /*
      * Send/receive controller data
      *
      * Client Request:
