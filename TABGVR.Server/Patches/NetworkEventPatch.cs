@@ -20,7 +20,9 @@ public class NetworkEventPatch
                 return false;
             case (EventCode)PacketCodes.ControllerMotion:
                 var player = __instance.GameRoomReference.FindPlayer(networkEvent.SenderPlayerID);
-                
+
+                if (player is null) return false;
+
                 if (networkEvent.Buffer.Length != 8 * 18) // drop malformed packets and kick the responsible player
                 {
                     PlayerKickCommand.Run(player,
@@ -29,8 +31,8 @@ public class NetworkEventPatch
                 }
 
                 byte[] message = [player.PlayerIndex, ..networkEvent.Buffer];
-                
-                __instance.SendMessageToClients(networkEvent.Code, message, byte.MaxValue, false);
+
+                __instance.SendMessageToClients(networkEvent.Code, message, byte.MaxValue, true);
 
                 return false;
             default:
