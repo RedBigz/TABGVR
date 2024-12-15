@@ -21,7 +21,13 @@ public class NetworkEventPatch
             case (EventCode)PacketCodes.ControllerMotion:
                 var player = __instance.GameRoomReference.FindPlayer(networkEvent.SenderPlayerID);
 
-                if (player is null) return false;
+                if (player is null)
+                {
+#if DEBUG
+                    LandLog.Log($"Player {networkEvent.SenderPlayerID} not found");
+#endif
+                    return false;
+                }
 
                 if (networkEvent.Buffer.Length != 8 * 18) // drop malformed packets and kick the responsible player
                 {
