@@ -4,5 +4,5 @@ using Newtonsoft.Json;
 
 public class Config
 {
-    public bool VROnly = true;
+    public bool VROnly = false;
 }
