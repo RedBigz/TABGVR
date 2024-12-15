@@ -1,5 +1,8 @@
 using System.Collections;
+using System.IO;
 using HarmonyLib;
+using Landfall.Network;
+using TABGVR.Network;
 using TABGVR.Player;
 using TABGVR.Player.Mundanities;
 using UnityEngine;
@@ -60,7 +63,8 @@ internal class KinematicsPatch
     /// <param name="holding">Holding Script</param>
     private static void PositionLeftHandToHandguard(Holding holding)
     {
-        holding.leftHand.MovePosition(holding.leftHand.position + (holding.heldObject.leftHandPos ?? holding.heldObject.rightHandPos).position -
+        holding.leftHand.MovePosition(holding.leftHand.position +
+                                      (holding.heldObject.leftHandPos ?? holding.heldObject.rightHandPos).position -
                                       holding.leftHand.transform.GetChild(0).position);
     }
 
@@ -72,8 +76,13 @@ internal class KinematicsPatch
     [HarmonyPostfix]
     private static void StartPostfix(Holding __instance)
     {
-        SetupConnection(__instance.rightHand);
-        SetupConnection(__instance.leftHand);
+        if (__instance.m_player == global::Player.localPlayer)
+        {
+            SetupConnection(__instance.rightHand);
+            SetupConnection(__instance.leftHand);
+        }
+        else
+            __instance.gameObject.AddComponent<NetKinematics>();
     }
 
     /// <summary>
@@ -131,8 +140,6 @@ internal class KinematicsPatch
             rigidBody.isKinematic = false;
             rigidBody.useGravity = false;
 
-            rigidBody.MovePosition(toMove);
-
             heldObject.transform.position = toMove;
         }
         else
@@ -142,6 +149,62 @@ internal class KinematicsPatch
 
         if (_gripping) PositionLeftHandToHandguard(__instance);
         else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
+    }
+
+    private static float updateCounter;
+
+    [HarmonyPatch(nameof(Holding.FixedUpdate))]
+    [HarmonyPostfix]
+    private static void FixedUpdatePostfix(Holding __instance)
+    {
+        updateCounter++;
+        updateCounter %= 50f / 20f;
+
+        if (updateCounter != 0) return;
+
+        if (!PhotonServerConnector.IsNetworkMatch) return;
+
+        var packet = new byte[8 * 18];
+
+        using (MemoryStream stream = new(packet))
+        {
+            using (BinaryWriter writer = new(stream))
+            {
+                void WriteVector(Vector3 vector)
+                {
+                    writer.Write((double)vector.x);
+                    writer.Write((double)vector.y);
+                    writer.Write((double)vector.z);
+                }
+
+                var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
+
+                WriteVector(Controllers.Head.transform.position);
+
+                WriteVector(Controllers.Head.transform.rotation.eulerAngles);
+
+                WriteVector(_gripping
+                    ? (heldObject.leftHandPos ?? heldObject.rightHandPos).position -
+                    Camera.current.transform.position + Controllers.Head.transform.position
+                    : Controllers.LeftHand.transform.position);
+
+                WriteVector(Controllers.LeftHand.transform.rotation.eulerAngles);
+
+                WriteVector(Controllers.RightHand.transform.position);
+
+                if (heldObject)
+                    WriteVector(_gripping && heldObject.leftHandPos
+                        ? Quaternion.LookRotation(Controllers.LeftHand.transform.position -
+                                                  Controllers.RightHand.transform.position).eulerAngles
+                        : (Controllers.RightHand.transform.rotation * Quaternion.Euler(
+                            90f + heldObject.rightHandPos.localRotation.x,
+                            heldObject.rightHandPos.localRotation.y, 0f)).eulerAngles);
+                else
+                    WriteVector(Vector3.zero);
+            }
+        }
+
+        ServerConnector.m_ServerHandler.SendMessageToServer((EventCode)PacketCodes.ControllerMotion, packet, false);
     }
 
     /// <summary>
