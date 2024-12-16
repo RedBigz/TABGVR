@@ -81,7 +81,7 @@ internal class KinematicsPatch
             SetupConnection(__instance.rightHand);
             SetupConnection(__instance.leftHand);
         }
-        else
+        else if (PhotonServerConnector.IsNetworkMatch)
             __instance.gameObject.AddComponent<NetKinematics>();
     }
 
