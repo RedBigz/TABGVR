@@ -9,10 +9,25 @@ public class NetKinematics : MonoBehaviour
     NetworkPlayer netPlayer;
     private Holding holding;
 
+    private void Setup(Rigidbody joint)
+    {
+        var arm = joint.transform.parent.Find(joint.gameObject.name.Replace("Hand", "Arm")).gameObject;
+
+        // disable gravity in arms
+        joint.useGravity = false;
+        arm.GetComponent<Rigidbody>().useGravity = false;
+
+        joint.isKinematic = false;
+        arm.GetComponent<Rigidbody>().isKinematic = false;
+    }
+
     private void Start()
     {
         netPlayer = GetComponent<NetworkPlayer>();
         holding = GetComponent<Holding>();
+        
+        Setup(holding.leftHand);
+        Setup(holding.rightHand);
     }
 
     private void FixedUpdate()
