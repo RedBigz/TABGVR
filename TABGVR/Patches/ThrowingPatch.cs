@@ -1,7 +1,7 @@
 /*
  * Hello!
  *
- * You may realise that if you uncomment the annotations in this file, your game will crash when you throw a grenade.
+ * You may realise that if you uncomment the attributes in this file, your game will crash when you throw a grenade.
  * I have no idea why it does that.
  *
  * If you can fix it tysm <3
