@@ -33,9 +33,9 @@ internal static class UIPorter
         {
             RaycastResult hit;
 
-            if (PlayerPatch.CurrentVRControls._rightTriggered)
+            if (PlayerPatch.CurrentVRControls.RightTriggered)
                 UIRightHandInteractor.TryGetCurrentUIRaycastResult(out hit);
-            else if (PlayerPatch.CurrentVRControls._leftTriggered)
+            else if (PlayerPatch.CurrentVRControls.LeftTriggered)
                 UILeftHandInteractor.TryGetCurrentUIRaycastResult(out hit);
             else return Vector2.zero;
 

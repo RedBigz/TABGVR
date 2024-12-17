@@ -5,25 +5,25 @@ namespace TABGVR.Player;
 public class PlayerManager
 {
     public static PlayerManager LocalPlayer;
-    public Camera cameraComponent;
+    public Camera CameraComponent;
 
-    public GameObject cameraObject;
-    public global::Player player;
+    public GameObject CameraObject;
+    public global::Player Player;
 
-    public bool playerIsClient;
-    public GameObject playerRoot;
+    public bool PlayerIsClient;
+    public GameObject PlayerRoot;
 
     public PlayerManager(GameObject root)
     {
-        playerRoot = root;
+        PlayerRoot = root;
 
-        player = root.GetComponent<global::Player>();
-        playerIsClient = player == global::Player.localPlayer; // i think this works
+        Player = root.GetComponent<global::Player>();
+        PlayerIsClient = Player == global::Player.localPlayer; // i think this works
 
-        cameraObject = playerRoot.transform.FindChildRecursive("Main Camera").gameObject;
-        cameraComponent = cameraObject.GetComponent<Camera>();
+        CameraObject = PlayerRoot.transform.FindChildRecursive("Main Camera").gameObject;
+        CameraComponent = CameraObject.GetComponent<Camera>();
 
-        if (playerIsClient) LocalPlayer = this;
+        if (PlayerIsClient) LocalPlayer = this;
     }
 
     /// <summary>

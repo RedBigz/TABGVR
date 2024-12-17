@@ -13,26 +13,26 @@ public class VRControls : MonoBehaviour
     internal const float StopSprintingThreshold = 0.1f;
     internal const float SwapWeaponThreshold = 0.8f;
 
-    internal bool _aButtonPressed;
-    internal bool _bButtonPressed;
-    internal bool _xButtonPressed;
-    internal bool _yButtonPressed;
+    internal bool AButtonPressed;
+    internal bool BButtonPressed;
+    internal bool XButtonPressed;
+    internal bool YButtonPressed;
 
-    internal bool _leftTriggered;
-    internal bool _rightTriggered;
+    internal bool LeftTriggered;
+    internal bool RightTriggered;
 
     public static bool SomethingTriggered;
     public static bool GetSomethingTriggered() => SomethingTriggered;
 
-    internal bool _menuButtonPressed;
+    internal bool MenuButtonPressed;
 
-    internal bool _weaponUpPressed;
-    internal bool _weaponDownPressed;
+    internal bool WeaponUpPressed;
+    internal bool WeaponDownPressed;
 
-    internal bool _snapRightPressed;
-    internal bool _snapLeftPressed;
+    internal bool SnapRightPressed;
+    internal bool SnapLeftPressed;
     
-    internal bool _rightClickPressed;
+    internal bool RightClickPressed;
 
     [CanBeNull] private Pickup currentPickup;
     private HaxInput haxInput;
@@ -116,7 +116,7 @@ public class VRControls : MonoBehaviour
         Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.menuButton, out var menuButtonPressed);
 
         // Menu
-        if (menuButtonPressed && !_menuButtonPressed)
+        if (menuButtonPressed && !MenuButtonPressed)
         {
             switch (MenuState.CurrentMenuState)
             {
@@ -130,7 +130,7 @@ public class VRControls : MonoBehaviour
             }
         }
 
-        _menuButtonPressed = menuButtonPressed;
+        MenuButtonPressed = menuButtonPressed;
 
         // Sprinting
         if (leftClick && !inputHandler.isSpringting)
@@ -143,7 +143,7 @@ public class VRControls : MonoBehaviour
             // Right Trigger
             if (rightTrigger > TriggerDeadZone)
             {
-                if (!_rightTriggered)
+                if (!RightTriggered)
                 {
                     if (Grenades.SelectedGrenade && interactionHandler.sinceThrow > 3f && !interactionHandler.isThrowing) interactionHandler.StartCoroutine(interactionHandler.Throwing());
                     else if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
@@ -158,7 +158,7 @@ public class VRControls : MonoBehaviour
             // Left Trigger
             if (leftTrigger > TriggerDeadZone)
             {
-                if (!_leftTriggered)
+                if (!LeftTriggered)
                 {
                     if (weaponHandler.leftWeapon) weaponHandler.PressAttack(false, false);
                     else PickupInteract();
@@ -169,14 +169,14 @@ public class VRControls : MonoBehaviour
                 }
             }
 
-            _rightTriggered = rightTrigger > TriggerDeadZone;
-            _leftTriggered = leftTrigger > TriggerDeadZone;
+            RightTriggered = rightTrigger > TriggerDeadZone;
+            LeftTriggered = leftTrigger > TriggerDeadZone;
         }
 
         SomethingTriggered = rightTrigger > 0.1 || leftTrigger > 0.1;
 
         // Right Click
-        if (rightClick && !_rightClickPressed)
+        if (rightClick && !RightClickPressed)
         {
             if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.ThrowableSlot)
             {
@@ -192,21 +192,21 @@ public class VRControls : MonoBehaviour
             weaponHandler.CurrentWeapon = Pickup.EquipSlots.ThrowableSlot;
         }
         
-        _rightClickPressed = rightClick;
+        RightClickPressed = rightClick;
 
         var movementVector = new Vector3(leftJoystick.x, 0.0f, leftJoystick.y);
 
         inputHandler.inputMovementDirection = rotationX.rotation * movementVector;
 
-        if (aButton && !_aButtonPressed) movementHandler.Jump();
-        if (bButton && !_bButtonPressed)
+        if (aButton && !AButtonPressed) movementHandler.Jump();
+        if (bButton && !BButtonPressed)
         {
             weaponHandler.rightWeapon?.gun.ReloadGun();
             weaponHandler.leftWeapon?.gun.ReloadGun();
         }
 
-        if (yButton && !_yButtonPressed) InventoryUI.ToggleInventoryState();
-        if (xButton && !_xButtonPressed)
+        if (yButton && !YButtonPressed) InventoryUI.ToggleInventoryState();
+        if (xButton && !XButtonPressed)
         {
             var activeSelf = mapHandler.images.activeSelf;
 
@@ -214,32 +214,32 @@ public class VRControls : MonoBehaviour
             mapHandler.images.SetActive(!activeSelf);
         }
 
-        _aButtonPressed = aButton;
-        _bButtonPressed = bButton;
-        _xButtonPressed = xButton;
-        _yButtonPressed = yButton;
+        AButtonPressed = aButton;
+        BButtonPressed = bButton;
+        XButtonPressed = xButton;
+        YButtonPressed = yButton;
 
         // Weapon Swapping
 
         var weaponUpPressed = rightJoystick.y >= SwapWeaponThreshold;
         var weaponDownPressed = rightJoystick.y <= -SwapWeaponThreshold;
 
-        if (weaponUpPressed && !_weaponUpPressed) SwapWeaponViaOffset(-1);
-        if (weaponDownPressed && !_weaponDownPressed) SwapWeaponViaOffset(1);
+        if (weaponUpPressed && !WeaponUpPressed) SwapWeaponViaOffset(-1);
+        if (weaponDownPressed && !WeaponDownPressed) SwapWeaponViaOffset(1);
 
-        _weaponUpPressed = weaponUpPressed;
-        _weaponDownPressed = weaponDownPressed;
+        WeaponUpPressed = weaponUpPressed;
+        WeaponDownPressed = weaponDownPressed;
 
         // Snap Turning
 
         var snapRightPressed = rightJoystick.x >= SwapWeaponThreshold;
         var snapLeftPressed = rightJoystick.x <= -SwapWeaponThreshold;
 
-        if (snapRightPressed && !_snapRightPressed) SnapTurn(1);
-        if (snapLeftPressed && !_snapLeftPressed) SnapTurn(-1);
+        if (snapRightPressed && !SnapRightPressed) SnapTurn(1);
+        if (snapLeftPressed && !SnapLeftPressed) SnapTurn(-1);
 
-        _snapRightPressed = snapRightPressed;
-        _snapLeftPressed = snapLeftPressed;
+        SnapRightPressed = snapRightPressed;
+        SnapLeftPressed = snapLeftPressed;
     }
 
     private void SnapTurn(int direction)

@@ -5,17 +5,17 @@ namespace TABGVR.Player;
 
 public class Floor : MonoBehaviour
 {
-    private bool _stationary = false;
+    private bool stationary = false;
     
     private void Start()
     {
-        _stationary = SceneManager.GetActiveScene().name == "MainMenu";
+        stationary = SceneManager.GetActiveScene().name == "MainMenu";
     }
 
     private void Update()
     {
         if (Camera.current is null) return;
         
-        transform.localPosition = _stationary ? Vector3.zero : Camera.current.transform.position - Controllers.Head.transform.position;
+        transform.localPosition = stationary ? Vector3.zero : Camera.current.transform.position - Controllers.Head.transform.position;
     }
 }

@@ -19,16 +19,16 @@ public class AntiCheatBypass
     }
 
     /// <summary>
-    ///     Patches <see cref="ACInterface" /> to disable AC.
+    ///     Patches <see cref="acInterface" /> to disable AC.
     /// </summary>
-    /// <param name="ACInterface">
-    ///     <see cref="ACInterface" />
+    /// <param name="acInterface">
+    ///     <see cref="acInterface" />
     /// </param>
     [HarmonyPatch(typeof(Easy_AC_Client), nameof(Easy_AC_Client.SetACInterface))]
     [HarmonyPrefix]
-    private static bool SetACInterface(AntiCheatClientInterface ACInterface)
+    private static bool SetAcInterface(AntiCheatClientInterface acInterface)
     {
-        Easy_AC_Client.m_Interface = ACInterface;
+        Easy_AC_Client.m_Interface = acInterface;
         return false;
     }
 

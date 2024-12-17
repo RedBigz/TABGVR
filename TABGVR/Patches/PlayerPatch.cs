@@ -17,18 +17,18 @@ public class PlayerPatch
     /// <summary>
     ///     Adds <see cref="VRControls" /> and <see cref="RotationTargetDriver" /> on local <see cref="Player" />.
     /// </summary>
-    /// <param name="__instance"></param>
+    /// <param name="instance"></param>
     [HarmonyPatch(nameof(global::Player.Start))]
     [HarmonyPostfix]
-    public static void Start(global::Player __instance)
+    public static void Start(global::Player instance)
     {
-        _playerManager = new PlayerManager(__instance.gameObject);
+        _playerManager = new PlayerManager(instance.gameObject);
 
-        if (!_playerManager.playerIsClient) return; // run the rest if we are the player
+        if (!_playerManager.PlayerIsClient) return; // run the rest if we are the player
 
         // run code on player load here
 
-        _rotationTarget = _playerManager.playerRoot.transform.Find("CameraMovement").Find("CameraRotationX");
+        _rotationTarget = _playerManager.PlayerRoot.transform.Find("CameraMovement").Find("CameraRotationX");
         // .Find("RotationTarget");
 
         var playerDriver = _rotationTarget.gameObject.AddComponent<RotationTargetDriver>();
@@ -36,6 +36,6 @@ public class PlayerPatch
         playerDriver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
         playerDriver.poseSource = TrackedPoseDriver.TrackedPose.Head;
 
-        CurrentVRControls = _playerManager.playerRoot.AddComponent<VRControls>();
+        CurrentVRControls = _playerManager.PlayerRoot.AddComponent<VRControls>();
     }
 }

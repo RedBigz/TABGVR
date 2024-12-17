@@ -13,8 +13,8 @@ namespace TABGVR.Patches.Interactions;
 [HarmonyPatch(typeof(Holding))]
 internal class KinematicsPatch
 {
-    internal static bool _gripAvailable;
-    internal static bool _gripping;
+    internal static bool GripAvailable;
+    internal static bool Gripping;
 
     /// <summary>
     ///     Sets up hand connection for joint by removing properties that cause issues.
@@ -71,40 +71,40 @@ internal class KinematicsPatch
     /// <summary>
     ///     Sets up hands for VR IK after Holding.Start.
     /// </summary>
-    /// <param name="__instance">Holding Script</param>
+    /// <param name="instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.Start))]
     [HarmonyPostfix]
-    private static void StartPostfix(Holding __instance)
+    private static void StartPostfix(Holding instance)
     {
-        if (__instance.m_player == global::Player.localPlayer)
+        if (instance.m_player == global::Player.localPlayer)
         {
-            SetupConnection(__instance.rightHand);
-            SetupConnection(__instance.leftHand);
+            SetupConnection(instance.rightHand);
+            SetupConnection(instance.leftHand);
         }
         else if (PhotonServerConnector.IsNetworkMatch)
-            __instance.gameObject.AddComponent<NetKinematics>();
+            instance.gameObject.AddComponent<NetKinematics>();
     }
 
     /// <summary>
     ///     Runs aiming and positioning for arms and guns after Holding.Update.
     /// </summary>
-    /// <param name="__instance">Holding Script</param>
+    /// <param name="instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.Update))]
     [HarmonyPostfix]
-    private static void UpdatePostfix(Holding __instance)
+    private static void UpdatePostfix(Holding instance)
     {
         if (!Controllers.LeftHand || !Controllers.RightHand || !Controllers.Head) return;
-        if (__instance.player != global::Player.localPlayer) return;
+        if (instance.player != global::Player.localPlayer) return;
 
         // Plugin.Logger.LogInfo(
         //     $"KP {__instance.player} / Head: {Controllers.Head.transform.position} / Left: {Controllers.LeftHand.transform.position} / Right: {Controllers.RightHand.transform.position}");
 
         // held will have hand positions which will be exploited here
-        var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
+        var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? instance.heldObject;
 
-        UpdateConnection(__instance.rightHand, Controllers.RightHand);
+        UpdateConnection(instance.rightHand, Controllers.RightHand);
 
-        if (__instance.heldObject)
+        if (instance.heldObject)
         {
             var rightHold = heldObject.rightHandPos;
             var leftHold = heldObject.leftHandPos;
@@ -115,18 +115,18 @@ internal class KinematicsPatch
 
             if (leftGrip > VRControls.TriggerDeadZone)
             {
-                if (_gripAvailable) _gripping = true;
+                if (GripAvailable) Gripping = true;
             }
             else
             {
-                _gripping = false;
+                Gripping = false;
             }
 
-            _gripAvailable =
-                !_gripping && Vector3.Distance(otherHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
+            GripAvailable =
+                !Gripping && Vector3.Distance(otherHold.position, Controllers.LeftHandFromGameCamera) < 0.1f;
 
             // look at left controller if gripping, or else just use the right controller rotation
-            heldObject.gameObject.transform.rotation = _gripping && leftHold
+            heldObject.gameObject.transform.rotation = Gripping && leftHold
                 ? Quaternion.LookRotation(
                     Controllers.LeftHand.transform.position - Controllers.RightHand.transform.position)
                 : Controllers.RightHand.transform.rotation *
@@ -144,23 +144,23 @@ internal class KinematicsPatch
         }
         else
         {
-            _gripping = false;
+            Gripping = false;
         }
 
-        if (_gripping) PositionLeftHandToHandguard(__instance);
-        else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
+        if (Gripping) PositionLeftHandToHandguard(instance);
+        else UpdateConnection(instance.leftHand, Controllers.LeftHand);
     }
 
-    private static float updateCounter;
+    private static float _updateCounter;
 
     [HarmonyPatch(nameof(Holding.FixedUpdate))]
     [HarmonyPostfix]
-    private static void FixedUpdatePostfix(Holding __instance)
+    private static void FixedUpdatePostfix(Holding instance)
     {
-        updateCounter++;
-        updateCounter %= 50f / 20f;
+        _updateCounter++;
+        _updateCounter %= 50f / 20f;
 
-        if (updateCounter != 0) return;
+        if (_updateCounter != 0) return;
 
         if (!PhotonServerConnector.IsNetworkMatch) return;
 
@@ -177,13 +177,13 @@ internal class KinematicsPatch
                     writer.Write((double)vector.z);
                 }
 
-                var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
+                var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? instance.heldObject;
 
                 WriteVector(Controllers.Head.transform.position);
 
                 WriteVector(Controllers.Head.transform.rotation.eulerAngles);
 
-                WriteVector(_gripping
+                WriteVector(Gripping
                     ? (heldObject.leftHandPos ?? heldObject.rightHandPos).position -
                     Camera.current.transform.position + Controllers.Head.transform.position
                     : Controllers.LeftHand.transform.position);
@@ -193,7 +193,7 @@ internal class KinematicsPatch
                 WriteVector(Controllers.RightHand.transform.position);
 
                 if (heldObject)
-                    WriteVector(_gripping && heldObject.leftHandPos
+                    WriteVector(Gripping && heldObject.leftHandPos
                         ? Quaternion.LookRotation(Controllers.LeftHand.transform.position -
                                                   Controllers.RightHand.transform.position).eulerAngles
                         : (Controllers.RightHand.transform.rotation * Quaternion.Euler(
@@ -229,14 +229,14 @@ internal class KinematicsPatch
     /// <summary>
     ///     Cancels Holding.HoldWeaponStill from running.
     /// </summary>
-    /// <param name="__result">
+    /// <param name="result">
     ///     <see cref="DoNothing" />
     /// </param>
     [HarmonyPatch(nameof(Holding.HoldweaponStill))]
     [HarmonyPrefix]
-    private static bool HoldWeaponStillCanceller(ref IEnumerator __result)
+    private static bool HoldWeaponStillCanceller(ref IEnumerator result)
     {
-        __result = DoNothing();
+        result = DoNothing();
         return false;
     }
 

@@ -15,29 +15,29 @@ public class CameraPatch
     /// <summary>
     ///     Creates VR Camera after <see cref="PlayerCamera" /> starts.
     /// </summary>
-    /// <param name="__instance">
+    /// <param name="instance">
     ///     <see cref="PlayerCamera" />
     /// </param>
     [HarmonyPatch(nameof(PlayerCamera.Start))]
     [HarmonyPostfix]
-    public static void Start(PlayerCamera __instance)
+    public static void Start(PlayerCamera instance)
     {
-        Plugin.Logger.LogInfo($"Camera idle: {__instance.gameObject.name}");
+        Plugin.Logger.LogInfo($"Camera idle: {instance.gameObject.name}");
 
-        var playerManager = PlayerManager.FromCamera(__instance.cam);
+        var playerManager = PlayerManager.FromCamera(instance.cam);
 
         var gameObject = new GameObject("VRCamera")
         {
             transform =
             {
-                parent = playerManager.player.m_cameraMovement.transform,
-                position = __instance.transform.position
+                parent = playerManager.Player.m_cameraMovement.transform,
+                position = instance.transform.position
             },
             tag = "MainCamera",
-            layer = __instance.gameObject.layer
+            layer = instance.gameObject.layer
         };
 
-        __instance.enabled = false;
+        instance.enabled = false;
 
         var camera = gameObject.AddComponent<UnityEngine.Camera>();
         camera.stereoTargetEye = StereoTargetEyeMask.Both;
@@ -55,10 +55,10 @@ public class CameraPatch
         var postProcessing = gameObject.AddComponent<PostProcessLayer>();
         postProcessing.volumeTrigger = gameObject.transform;
         postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
-        postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
+        postProcessing.m_Resources = instance.GetComponent<PostProcessLayer>().m_Resources;
 
         var highlight = gameObject.AddComponent<HighlightingRenderer>();
-        var highlightReference = __instance.GetComponent<HighlightingRenderer>();
+        var highlightReference = instance.GetComponent<HighlightingRenderer>();
         highlight.downsampleFactor = highlightReference.downsampleFactor;
         highlight.iterations = highlightReference.iterations;
         highlight.blurMinSpread = highlightReference.blurMinSpread;
@@ -72,7 +72,7 @@ public class CameraPatch
             weight = 1f
         };
 
-        var constraint = __instance.gameObject.AddComponent<RotationConstraint>();
+        var constraint = instance.gameObject.AddComponent<RotationConstraint>();
         constraint.AddSource(source);
 
         constraint.constraintActive = true;

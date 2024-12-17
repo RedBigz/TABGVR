@@ -9,5 +9,5 @@ public class Grenades
     /// </summary>
     [CanBeNull]
     public static Grenade SelectedGrenade =>
-        PlayerManager.LocalPlayer.player.GetComponent<Holding>().rightHand.GetComponentInChildren<Grenade>();
+        PlayerManager.LocalPlayer.Player.GetComponent<Holding>().rightHand.GetComponentInChildren<Grenade>();
 }
