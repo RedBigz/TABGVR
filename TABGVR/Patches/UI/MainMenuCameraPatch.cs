@@ -10,14 +10,14 @@ namespace TABGVR.Patches.UI;
 [HarmonyPatch(typeof(CameraIdleMovement), nameof(CameraIdleMovement.Start))]
 public static class MainMenuCameraPatch
 {
-    public static void Postfix(CameraIdleMovement instance)
+    public static void Postfix(CameraIdleMovement __instance)
     {
         var gameObject = new GameObject("VRCameraRoot")
         {
             transform =
             {
-                parent = instance.transform.parent,
-                position = Vector3.Scale(instance.transform.position, Vector3.forward + Vector3.right)
+                parent = __instance.transform.parent,
+                position = Vector3.Scale(__instance.transform.position, Vector3.forward + Vector3.right)
             }
         };
 
@@ -25,12 +25,12 @@ public static class MainMenuCameraPatch
         {
             transform = { parent = gameObject.transform },
             tag = "MainCamera",
-            layer = instance.gameObject.layer
+            layer = __instance.gameObject.layer
         };
 
-        var oldCamera = instance.GetComponent<Camera>();
+        var oldCamera = __instance.GetComponent<Camera>();
         oldCamera.enabled = false;
-        instance.enabled = false;
+        __instance.enabled = false;
 
         var camera = cameraObject.AddComponent<Camera>();
         camera.stereoTargetEye = StereoTargetEyeMask.Both;
@@ -47,7 +47,7 @@ public static class MainMenuCameraPatch
         var postProcessing = cameraObject.AddComponent<PostProcessLayer>();
         postProcessing.volumeTrigger = cameraObject.transform;
         postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
-        postProcessing.m_Resources = instance.GetComponent<PostProcessLayer>().m_Resources;
+        postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
 
         camera.cullingMask = oldCamera.cullingMask;
         Controllers.VRFloor.transform.parent = gameObject.transform;

@@ -2,7 +2,7 @@ using Epic.OnlineServices.AntiCheatCommon;
 using HarmonyLib;
 using Landfall.Network;
 
-namespace TABGVR.Server;
+namespace TABGVR.Server.Patches;
 
 [HarmonyPatch(typeof(ServerClient), nameof(ServerClient.HandleNetorkEvent))]
 public class NetworkEventPatch

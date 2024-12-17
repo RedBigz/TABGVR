@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
 using TABGInput;
+using TABGVR.Input;
 using TABGVR.Player;
 
 namespace TABGVR.Patches.Interactions;

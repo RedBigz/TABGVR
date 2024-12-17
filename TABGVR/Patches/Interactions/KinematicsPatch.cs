@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using HarmonyLib;
 using Landfall.Network;
+using TABGVR.Input;
 using TABGVR.Network;
 using TABGVR.Player;
 using TABGVR.Player.Mundanities;
@@ -71,40 +72,40 @@ internal class KinematicsPatch
     /// <summary>
     ///     Sets up hands for VR IK after Holding.Start.
     /// </summary>
-    /// <param name="instance">Holding Script</param>
+    /// <param name="__instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.Start))]
     [HarmonyPostfix]
-    private static void StartPostfix(Holding instance)
+    private static void StartPostfix(Holding __instance)
     {
-        if (instance.m_player == global::Player.localPlayer)
+        if (__instance.m_player == global::Player.localPlayer)
         {
-            SetupConnection(instance.rightHand);
-            SetupConnection(instance.leftHand);
+            SetupConnection(__instance.rightHand);
+            SetupConnection(__instance.leftHand);
         }
         else if (PhotonServerConnector.IsNetworkMatch)
-            instance.gameObject.AddComponent<NetKinematics>();
+            __instance.gameObject.AddComponent<NetKinematics>();
     }
 
     /// <summary>
     ///     Runs aiming and positioning for arms and guns after Holding.Update.
     /// </summary>
-    /// <param name="instance">Holding Script</param>
+    /// <param name="__instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.Update))]
     [HarmonyPostfix]
-    private static void UpdatePostfix(Holding instance)
+    private static void UpdatePostfix(Holding __instance)
     {
         if (!Controllers.LeftHand || !Controllers.RightHand || !Controllers.Head) return;
-        if (instance.player != global::Player.localPlayer) return;
+        if (__instance.player != global::Player.localPlayer) return;
 
         // Plugin.Logger.LogInfo(
         //     $"KP {__instance.player} / Head: {Controllers.Head.transform.position} / Left: {Controllers.LeftHand.transform.position} / Right: {Controllers.RightHand.transform.position}");
 
         // held will have hand positions which will be exploited here
-        var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? instance.heldObject;
+        var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
 
-        UpdateConnection(instance.rightHand, Controllers.RightHand);
+        UpdateConnection(__instance.rightHand, Controllers.RightHand);
 
-        if (instance.heldObject)
+        if (__instance.heldObject)
         {
             var rightHold = heldObject.rightHandPos;
             var leftHold = heldObject.leftHandPos;
@@ -147,15 +148,15 @@ internal class KinematicsPatch
             Gripping = false;
         }
 
-        if (Gripping) PositionLeftHandToHandguard(instance);
-        else UpdateConnection(instance.leftHand, Controllers.LeftHand);
+        if (Gripping) PositionLeftHandToHandguard(__instance);
+        else UpdateConnection(__instance.leftHand, Controllers.LeftHand);
     }
 
     private static float _updateCounter;
 
     [HarmonyPatch(nameof(Holding.FixedUpdate))]
     [HarmonyPostfix]
-    private static void FixedUpdatePostfix(Holding instance)
+    private static void FixedUpdatePostfix(Holding __instance)
     {
         _updateCounter++;
         _updateCounter %= 50f / 20f;
@@ -177,7 +178,7 @@ internal class KinematicsPatch
                     writer.Write((double)vector.z);
                 }
 
-                var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? instance.heldObject;
+                var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;
 
                 WriteVector(Controllers.Head.transform.position);
 
@@ -229,14 +230,14 @@ internal class KinematicsPatch
     /// <summary>
     ///     Cancels Holding.HoldWeaponStill from running.
     /// </summary>
-    /// <param name="result">
+    /// <param name="__result">
     ///     <see cref="DoNothing" />
     /// </param>
     [HarmonyPatch(nameof(Holding.HoldweaponStill))]
     [HarmonyPrefix]
-    private static bool HoldWeaponStillCanceller(ref IEnumerator result)
+    private static bool HoldWeaponStillCanceller(ref IEnumerator __result)
     {
-        result = DoNothing();
+        __result = DoNothing();
         return false;
     }
 

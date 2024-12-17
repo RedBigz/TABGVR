@@ -19,16 +19,17 @@ public class AntiCheatBypass
     }
 
     /// <summary>
-    ///     Patches <see cref="acInterface" /> to disable AC.
+    ///     Patches <see cref="ACInterface" /> to disable AC.
     /// </summary>
-    /// <param name="acInterface">
-    ///     <see cref="acInterface" />
+    /// <param name="ACInterface">
+    ///     <see cref="ACInterface" />
     /// </param>
     [HarmonyPatch(typeof(Easy_AC_Client), nameof(Easy_AC_Client.SetACInterface))]
     [HarmonyPrefix]
-    private static bool SetAcInterface(AntiCheatClientInterface acInterface)
+    // ReSharper disable once InconsistentNaming
+    private static bool SetAcInterface(AntiCheatClientInterface ACInterface)
     {
-        Easy_AC_Client.m_Interface = acInterface;
+        Easy_AC_Client.m_Interface = ACInterface;
         return false;
     }
 

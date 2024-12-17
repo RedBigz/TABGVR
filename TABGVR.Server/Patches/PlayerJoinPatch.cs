@@ -1,8 +1,7 @@
-using Epic.OnlineServices.Auth;
 using HarmonyLib;
 using Landfall.Network;
 
-namespace TABGVR.Server;
+namespace TABGVR.Server.Patches;
 
 [HarmonyPatch(typeof(RoomInitRequestCommand), nameof(RoomInitRequestCommand.Run))]
 public class PlayerJoinPatch

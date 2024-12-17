@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
 using Landfall.TABG.UI;
-using TABGVR.Player;
+using TABGVR.Input;
 
 namespace TABGVR.Patches.UI;
 
@@ -30,12 +30,12 @@ public class InventoryUIManagerUpdatePatch
     /// <summary>
     /// Starts dragging an item if either controller is triggered.
     /// </summary>
-    /// <param name="instance"></param>
-    public static void Postfix(InventoryUIManager instance)
+    /// <param name="__instance"></param>
+    public static void Postfix(InventoryUIManager __instance)
     {
-        if (instance.isDragging || instance.selectedSlot is null || instance.selectedSlot.isEmpty) return;
+        if (__instance.isDragging || __instance.selectedSlot is null || __instance.selectedSlot.isEmpty) return;
         if (!VRControls.SomethingTriggered) return;
 
-        instance.StartDragging();
+        __instance.StartDragging();
     }
 }
