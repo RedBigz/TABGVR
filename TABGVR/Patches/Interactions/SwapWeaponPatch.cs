@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
 using TABGInput;
 using TABGVR.Player;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.Interactions;
 
 [HarmonyPatch(typeof(InteractionHandler), nameof(InteractionHandler.StartPickup), MethodType.Enumerator)]
 public static class SwapWeaponPatch

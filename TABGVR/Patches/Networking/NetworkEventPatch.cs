@@ -4,7 +4,7 @@ using Landfall.Network;
 using TABGVR.Network;
 using UnityEngine;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.Networking;
 
 [HarmonyPatch(typeof(ServerConnector), nameof(ServerConnector.OnEvent))]
 public class NetworkEventPatch

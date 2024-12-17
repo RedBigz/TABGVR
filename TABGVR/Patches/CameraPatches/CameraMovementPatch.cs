@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.CameraPatches;
 
 [HarmonyPatch(typeof(CameraMovement))]
 public class CameraMovementPatch

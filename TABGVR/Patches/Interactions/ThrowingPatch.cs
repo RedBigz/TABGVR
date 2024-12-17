@@ -12,7 +12,7 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using TABGVR.Player;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.Interactions;
 
 // [HarmonyPatch(typeof(InteractionHandler), nameof(InteractionHandler.Throwing), MethodType.Enumerator)]
 // [HarmonyDebug]

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SpatialTracking;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.UI;
 
 [HarmonyPatch(typeof(CameraIdleMovement), nameof(CameraIdleMovement.Start))]
 public static class MainMenuCameraPatch

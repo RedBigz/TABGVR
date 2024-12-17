@@ -8,7 +8,7 @@ using TABGVR.Player.Mundanities;
 using UnityEngine;
 using UnityEngine.XR;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.Interactions;
 
 [HarmonyPatch(typeof(Holding))]
 internal class KinematicsPatch

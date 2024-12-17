@@ -7,7 +7,7 @@ using UnityEngine.Animations;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SpatialTracking;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.CameraPatches;
 
 [HarmonyPatch(typeof(PlayerCamera))]
 public class CameraPatch
@@ -39,7 +39,7 @@ public class CameraPatch
 
         __instance.enabled = false;
 
-        var camera = gameObject.AddComponent<Camera>();
+        var camera = gameObject.AddComponent<UnityEngine.Camera>();
         camera.stereoTargetEye = StereoTargetEyeMask.Both;
         camera.enabled = true;
         camera.nearClipPlane = 0.01f;

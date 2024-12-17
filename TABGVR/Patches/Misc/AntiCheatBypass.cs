@@ -2,7 +2,7 @@ using Epic.OnlineServices.AntiCheatClient;
 using HarmonyLib;
 using Landfall;
 
-namespace TABGVR.Patches;
+namespace TABGVR.Patches.Misc;
 
 public class AntiCheatBypass
 {

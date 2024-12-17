@@ -1,7 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using TABGVR.Patches;
+using TABGVR.Patches.Misc;
 using TABGVR.Player;
 using TABGVR.Util;
 using UnityEngine.SceneManagement;
