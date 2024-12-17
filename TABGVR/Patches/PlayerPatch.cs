@@ -1,4 +1,5 @@
 using HarmonyLib;
+using TABGVR.Input;
 using TABGVR.Player;
 using UnityEngine;
 using UnityEngine.SpatialTracking;

@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using TABGVR.Patches.Misc;
@@ -17,8 +18,12 @@ public class Plugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;
 
+    public static ConfigEntry<bool> SnapTurnEnabled;
+
     private void Awake()
     {
+        SnapTurnEnabled = Config.Bind("Input", "SnapTurn", true, "Use snap turn instead of smooth turn.");
+        
         Logger = base.Logger;
 
         Logger.LogInfo("TABGVR plugin loaded.");

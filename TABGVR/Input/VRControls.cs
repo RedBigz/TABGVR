@@ -1,51 +1,39 @@
 using JetBrains.Annotations;
 using Landfall.Network;
+using TABGVR.Player;
 using TABGVR.Player.Mundanities;
 using TABGVR.Util;
 using UnityEngine;
 using UnityEngine.XR;
 
-namespace TABGVR.Player;
+namespace TABGVR.Input;
 
 public class VRControls : MonoBehaviour
 {
-    internal const float TriggerDeadZone = 0.7f;
-    internal const float StopSprintingThreshold = 0.1f;
-    internal const float SwapWeaponThreshold = 0.8f;
+    public const float TriggerDeadZone = 0.7f;
+    public const float StopSprintingThreshold = 0.1f;
+    public const float SwapWeaponThreshold = 0.8f;
 
-    internal bool AButtonPressed;
-    internal bool BButtonPressed;
-    internal bool XButtonPressed;
-    internal bool YButtonPressed;
-
-    internal bool LeftTriggered;
-    internal bool RightTriggered;
+    public readonly ControlList ControlList = new();
 
     public static bool SomethingTriggered;
-    public static bool GetSomethingTriggered() => SomethingTriggered;
+    public static bool GetSomethingTriggered() => SomethingTriggered; // For SwapWeaponPatch
 
-    internal bool MenuButtonPressed;
+    // Components
 
-    internal bool WeaponUpPressed;
-    internal bool WeaponDownPressed;
-
-    internal bool SnapRightPressed;
-    internal bool SnapLeftPressed;
-    
-    internal bool RightClickPressed;
-
-    [CanBeNull] private Pickup currentPickup;
-    private HaxInput haxInput;
+    private global::Player player;
     private InputHandler inputHandler;
     private InteractionHandler interactionHandler;
     private MovementHandler movementHandler;
-    private global::Player player;
-    private Transform rotationX;
     private WeaponHandler weaponHandler;
-    private Inventory inventory;
+    [CanBeNull] private Pickup currentPickup;
 
-    private MenuTransitions menuTransitions;
+    private Transform rotationX; // For movement direction
+
+    // UI Components
+    private Inventory inventory;
     private MapHandler mapHandler;
+    private MenuTransitions menuTransitions;
 
     private void Start()
     {
@@ -56,8 +44,6 @@ public class VRControls : MonoBehaviour
         player = GetComponent<global::Player>();
         inventory = player.m_inventory;
         rotationX = gameObject.GetComponentInChildren<RotationTarget>().transform.parent;
-
-        haxInput = HaxInput.Instance;
 
         interactionHandler.canPickUpAction = pickup => currentPickup = pickup;
         interactionHandler.canNotPickUpAction = () => currentPickup = null;
@@ -90,6 +76,40 @@ public class VRControls : MonoBehaviour
         }
     }
 
+    private void UpdateBinaryInputsInternal(VRInputBinary input, bool value)
+    {
+        // Plugin.Logger.LogInfo($"Updating binary inputs: {input} <- {value}");
+        
+        input.JustPressed = false;
+        input.JustReleased = false;
+
+        if (value)
+            if (!input.HoldingDown) input.JustPressed = true;
+            else input.JustPressed = false;
+        else if (input.HoldingDown) input.JustReleased = true;
+        else input.JustReleased = false;
+
+        input.HoldingDown = value;
+    }
+
+    private void UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<bool> feature)
+    {
+        hand.TryGetFeatureValue(feature, out var value);
+        UpdateBinaryInputsInternal(input, value);
+    }
+
+    private void UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<float> feature)
+    {
+        hand.TryGetFeatureValue(feature, out var value);
+        UpdateBinaryInputsInternal(input, value > TriggerDeadZone);
+    }
+
+    private void Update1DInputs(VRInput1D input, float value)
+    {
+        input.LastFrameDigital = input.Digital;
+        input.X = value;
+    }
+
     private void Update()
     {
         // update interactor visibility
@@ -101,22 +121,26 @@ public class VRControls : MonoBehaviour
         Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primary2DAxis, out var rightJoystick);
         Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.primary2DAxis, out var leftJoystick);
 
-        Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.trigger, out var rightTrigger);
-        Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.trigger, out var leftTrigger);
+        UpdateBinaryInputs(Controllers.LeftHandXR, ControlList.LeftTriggerBinary, CommonUsages.trigger);
+        UpdateBinaryInputs(Controllers.RightHandXR, ControlList.RightTriggerBinary, CommonUsages.trigger);
 
-        Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primaryButton, out var aButton);
-        Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.primaryButton, out var xButton);
+        UpdateBinaryInputs(Controllers.RightHandXR, ControlList.AButton, CommonUsages.primaryButton);
+        UpdateBinaryInputs(Controllers.RightHandXR, ControlList.BButton, CommonUsages.secondaryButton);
+        UpdateBinaryInputs(Controllers.LeftHandXR, ControlList.XButton, CommonUsages.primaryButton);
+        UpdateBinaryInputs(Controllers.LeftHandXR, ControlList.YButton, CommonUsages.secondaryButton);
 
-        Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.secondaryButton, out var bButton);
-        Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.secondaryButton, out var yButton);
+        UpdateBinaryInputs(Controllers.LeftHandXR, ControlList.LeftStick, CommonUsages.primary2DAxisClick);
+        UpdateBinaryInputs(Controllers.RightHandXR, ControlList.RightStick, CommonUsages.primary2DAxisClick);
 
-        Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out var rightClick);
-        Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out var leftClick);
+        UpdateBinaryInputs(Controllers.LeftHandXR, ControlList.MenuButton, CommonUsages.menuButton);
 
-        Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.menuButton, out var menuButtonPressed);
+        UpdateBinaryInputsInternal(ControlList.WeaponSwitchUp, rightJoystick.y >= SwapWeaponThreshold);
+        UpdateBinaryInputsInternal(ControlList.WeaponSwitchDown, rightJoystick.y <= -SwapWeaponThreshold);
+        
+        Update1DInputs(ControlList.Turn, rightJoystick.x);
 
         // Menu
-        if (menuButtonPressed && !MenuButtonPressed)
+        if (ControlList.MenuButton.JustPressed)
         {
             switch (MenuState.CurrentMenuState)
             {
@@ -130,10 +154,8 @@ public class VRControls : MonoBehaviour
             }
         }
 
-        MenuButtonPressed = menuButtonPressed;
-
         // Sprinting
-        if (leftClick && !inputHandler.isSpringting)
+        if (ControlList.LeftStick.JustPressed && !inputHandler.isSpringting)
             inputHandler.isSpringting = true;
 
         inputHandler.isSpringting &= leftJoystick.magnitude > StopSprintingThreshold;
@@ -141,11 +163,13 @@ public class VRControls : MonoBehaviour
         if (!global::Player.usingInterface)
         {
             // Right Trigger
-            if (rightTrigger > TriggerDeadZone)
+            if (ControlList.RightTriggerBinary.HoldingDown)
             {
-                if (!RightTriggered)
+                if (ControlList.RightTriggerBinary.JustPressed)
                 {
-                    if (Grenades.SelectedGrenade && interactionHandler.sinceThrow > 3f && !interactionHandler.isThrowing) interactionHandler.StartCoroutine(interactionHandler.Throwing());
+                    if (Grenades.SelectedGrenade && interactionHandler.sinceThrow > 3f &&
+                        !interactionHandler.isThrowing)
+                        interactionHandler.StartCoroutine(interactionHandler.Throwing());
                     else if (weaponHandler.rightWeapon) weaponHandler.PressAttack(true, false);
                     else PickupInteract();
                 }
@@ -156,9 +180,9 @@ public class VRControls : MonoBehaviour
             }
 
             // Left Trigger
-            if (leftTrigger > TriggerDeadZone)
+            if (ControlList.LeftTriggerBinary.HoldingDown)
             {
-                if (!LeftTriggered)
+                if (ControlList.LeftTriggerBinary.JustPressed)
                 {
                     if (weaponHandler.leftWeapon) weaponHandler.PressAttack(false, false);
                     else PickupInteract();
@@ -168,15 +192,12 @@ public class VRControls : MonoBehaviour
                     weaponHandler.HoldAttack(false, false);
                 }
             }
-
-            RightTriggered = rightTrigger > TriggerDeadZone;
-            LeftTriggered = leftTrigger > TriggerDeadZone;
         }
 
-        SomethingTriggered = rightTrigger > 0.1 || leftTrigger > 0.1;
+        SomethingTriggered = ControlList.LeftTriggerBinary.HoldingDown || ControlList.RightTriggerBinary.HoldingDown;
 
         // Right Click
-        if (rightClick && !RightClickPressed)
+        if (ControlList.RightStick.JustPressed)
         {
             if (weaponHandler.CurrentWeapon == Pickup.EquipSlots.ThrowableSlot)
             {
@@ -188,25 +209,22 @@ public class VRControls : MonoBehaviour
                     if (inventory.GetGrenadeInSelectedSlot().Pickup) break;
                 }
             }
-            
+
             weaponHandler.CurrentWeapon = Pickup.EquipSlots.ThrowableSlot;
         }
-        
-        RightClickPressed = rightClick;
 
         var movementVector = new Vector3(leftJoystick.x, 0.0f, leftJoystick.y);
 
         inputHandler.inputMovementDirection = rotationX.rotation * movementVector;
 
-        if (aButton && !AButtonPressed) movementHandler.Jump();
-        if (bButton && !BButtonPressed)
+        if (ControlList.AButton.JustPressed) movementHandler.Jump();
+        if (ControlList.BButton.JustPressed)
         {
             weaponHandler.rightWeapon?.gun.ReloadGun();
             weaponHandler.leftWeapon?.gun.ReloadGun();
         }
 
-        if (yButton && !YButtonPressed) InventoryUI.ToggleInventoryState();
-        if (xButton && !XButtonPressed)
+        if (ControlList.XButton.JustPressed)
         {
             var activeSelf = mapHandler.images.activeSelf;
 
@@ -214,39 +232,29 @@ public class VRControls : MonoBehaviour
             mapHandler.images.SetActive(!activeSelf);
         }
 
-        AButtonPressed = aButton;
-        BButtonPressed = bButton;
-        XButtonPressed = xButton;
-        YButtonPressed = yButton;
+        if (ControlList.YButton.JustPressed) InventoryUI.ToggleInventoryState();
 
         // Weapon Swapping
 
-        var weaponUpPressed = rightJoystick.y >= SwapWeaponThreshold;
-        var weaponDownPressed = rightJoystick.y <= -SwapWeaponThreshold;
+        if (ControlList.WeaponSwitchUp.JustPressed) SwapWeaponViaOffset(-1);
+        if (ControlList.WeaponSwitchDown.JustPressed) SwapWeaponViaOffset(1);
 
-        if (weaponUpPressed && !WeaponUpPressed) SwapWeaponViaOffset(-1);
-        if (weaponDownPressed && !WeaponDownPressed) SwapWeaponViaOffset(1);
-
-        WeaponUpPressed = weaponUpPressed;
-        WeaponDownPressed = weaponDownPressed;
-
-        // Snap Turning
-
-        var snapRightPressed = rightJoystick.x >= SwapWeaponThreshold;
-        var snapLeftPressed = rightJoystick.x <= -SwapWeaponThreshold;
-
-        if (snapRightPressed && !SnapRightPressed) SnapTurn(1);
-        if (snapLeftPressed && !SnapLeftPressed) SnapTurn(-1);
-
-        SnapRightPressed = snapRightPressed;
-        SnapLeftPressed = snapLeftPressed;
+        // Turning
+        if (Plugin.SnapTurnEnabled.Value)
+        {
+            if (ControlList.Turn.Digital != ControlList.Turn.LastFrameDigital) SnapTurn(45 * ControlList.Turn.Digital);
+        }
+        else
+        {
+            SnapTurn(Time.deltaTime * ControlList.Turn.Digital * 200);
+        }
     }
 
-    private void SnapTurn(int direction)
+    private void SnapTurn(float direction)
     {
-        UIPorter.UISnapTurnBase?.transform.Rotate(Vector3.up, direction * 45);
-        Controllers.SnapTurnParent.transform.Rotate(Vector3.up, direction * 45);
-        player.m_cameraMovement.transform.Rotate(Vector3.up, direction * 45);
+        UIPorter.UISnapTurnBase?.transform.Rotate(Vector3.up, direction);
+        Controllers.SnapTurnParent.transform.Rotate(Vector3.up, direction);
+        player.m_cameraMovement.transform.Rotate(Vector3.up, direction);
     }
 
     /// <summary>
