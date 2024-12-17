@@ -17,12 +17,12 @@ public class PlayerPatch
     /// <summary>
     ///     Adds <see cref="VRControls" /> and <see cref="RotationTargetDriver" /> on local <see cref="Player" />.
     /// </summary>
-    /// <param name="instance"></param>
+    /// <param name="__instance"></param>
     [HarmonyPatch(nameof(global::Player.Start))]
     [HarmonyPostfix]
-    public static void Start(global::Player instance)
+    public static void Start(global::Player __instance)
     {
-        _playerManager = new PlayerManager(instance.gameObject);
+        _playerManager = new PlayerManager(__instance.gameObject);
 
         if (!_playerManager.PlayerIsClient) return; // run the rest if we are the player
 
