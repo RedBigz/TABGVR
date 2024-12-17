@@ -8,7 +8,9 @@ using UnityEngine;
 namespace TABGVR.Patches.UI;
 
 [HarmonyPatch(typeof(DraggedItem), nameof(DraggedItem.LateUpdate))]
+#if DEBUG
 [HarmonyDebug]
+#endif
 public class DraggedItemPatch
 {
     public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
