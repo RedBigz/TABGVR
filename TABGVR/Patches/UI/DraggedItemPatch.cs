@@ -25,7 +25,8 @@ public class DraggedItemPatch
             .RemoveInstructions(11)
             .InsertAndAdvance(
                 new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Callvirt, typeof(DraggedItem).GetProperty(nameof(DraggedItem.transform))!.GetGetMethod()),
+                new CodeInstruction(OpCodes.Callvirt,
+                    typeof(DraggedItem).GetProperty(nameof(DraggedItem.transform))!.GetGetMethod()),
                 Transpilers.EmitDelegate((Transform transform) =>
                     {
                         transform.position = Vector3.Lerp(transform.position, UIPorter.DragPosition,
