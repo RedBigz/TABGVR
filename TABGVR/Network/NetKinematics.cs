@@ -52,10 +52,15 @@ public class NetKinematics : MonoBehaviour
                                     rightHandJoint.transform.GetChild(0).position);
 
         if (holding.heldObject is null) return;
+        
+        var heldObject = holding.heldObject;
+        
+        heldObject.rig.isKinematic = false;
+        heldObject.rig.useGravity = false;
 
-        holding.heldObject.gameObject.transform.rotation = Quaternion.Euler(store.RightHandRotation);
+        heldObject.gameObject.transform.rotation = Quaternion.Euler(store.RightHandRotation);
 
-        holding.heldObject.transform.position = rightHandPosition + holding.heldObject.gameObject.transform.position -
+        heldObject.transform.position = rightHandPosition + holding.heldObject.gameObject.transform.position -
                                                 holding.heldObject.rightHandPos.position;
     }
 }
