@@ -92,16 +92,18 @@ public class VRControls : MonoBehaviour
         input.HoldingDown = value;
     }
 
-    private void UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<bool> feature)
+    private bool UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<bool> feature)
     {
         hand.TryGetFeatureValue(feature, out var value);
         UpdateBinaryInputsInternal(input, value);
+        return value;
     }
 
-    private void UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<float> feature)
+    private float UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<float> feature)
     {
         hand.TryGetFeatureValue(feature, out var value);
         UpdateBinaryInputsInternal(input, value > TriggerDeadZone);
+        return value;
     }
 
     private void Update1DInputs(VRInput1D input, float value)
@@ -121,8 +123,8 @@ public class VRControls : MonoBehaviour
         Controllers.RightHandXR.TryGetFeatureValue(CommonUsages.primary2DAxis, out var rightJoystick);
         Controllers.LeftHandXR.TryGetFeatureValue(CommonUsages.primary2DAxis, out var leftJoystick);
 
-        UpdateBinaryInputs(Controllers.LeftHandXR, ControlList.LeftTriggerBinary, CommonUsages.trigger);
-        UpdateBinaryInputs(Controllers.RightHandXR, ControlList.RightTriggerBinary, CommonUsages.trigger);
+        var leftTrigger = UpdateBinaryInputs(Controllers.LeftHandXR, ControlList.LeftTriggerBinary, CommonUsages.trigger);
+        var rightTrigger = UpdateBinaryInputs(Controllers.RightHandXR, ControlList.RightTriggerBinary, CommonUsages.trigger);
 
         UpdateBinaryInputs(Controllers.RightHandXR, ControlList.AButton, CommonUsages.primaryButton);
         UpdateBinaryInputs(Controllers.RightHandXR, ControlList.BButton, CommonUsages.secondaryButton);
@@ -194,7 +196,7 @@ public class VRControls : MonoBehaviour
             }
         }
 
-        SomethingTriggered = ControlList.LeftTriggerBinary.HoldingDown || ControlList.RightTriggerBinary.HoldingDown;
+        SomethingTriggered = leftTrigger > 0.1 || rightTrigger > 0.1;
 
         // Right Click
         if (ControlList.RightStick.JustPressed)
