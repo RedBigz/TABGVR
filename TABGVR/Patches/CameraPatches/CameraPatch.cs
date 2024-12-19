@@ -52,10 +52,10 @@ public class CameraPatch
         gameObject.AddComponent<FlareLayer>();
         gameObject.AddComponent<DS_HazeView>();
 
-        var postProcessing = gameObject.AddComponent<PostProcessLayer>();
-        postProcessing.volumeTrigger = gameObject.transform;
-        postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
-        postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
+        // var postProcessing = gameObject.AddComponent<PostProcessLayer>();
+        // postProcessing.volumeTrigger = gameObject.transform;
+        // postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
+        // postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
 
         var highlight = gameObject.AddComponent<HighlightingRenderer>();
         var highlightReference = __instance.GetComponent<HighlightingRenderer>();
