@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
@@ -14,7 +15,7 @@ public static class Controllers
     ///     <see cref="InputDevice" />s of each hand.
     /// </summary>
     public static InputDevice LeftHandXR, RightHandXR;
-    
+
 
     /// <summary>
     ///     Left hand Vector3 in relative space.
@@ -36,15 +37,15 @@ public static class Controllers
     public static void Setup()
     {
         SnapTurnParent = new GameObject("SnapTurnParent");
-        
+
         Head = new GameObject("TABGVR_HMD");
         LeftHand = new GameObject("TABGVR_LeftHand");
         RightHand = new GameObject("TABGVR_RightHand");
-        
+
         Head.transform.parent = SnapTurnParent.transform;
         RightHand.transform.parent = SnapTurnParent.transform;
         LeftHand.transform.parent = SnapTurnParent.transform;
-        
+
         VRFloor = new GameObject("Floor").AddComponent<Floor>(); // For UI tracking
 
         var headDriver = Head.AddComponent<TrackedPoseDriver>();
@@ -73,7 +74,15 @@ public static class Controllers
             InputDeviceCharacteristics.Left | InputDeviceCharacteristics.HeldInHand |
             InputDeviceCharacteristics.Controller, leftControllers);
 
-        RightHandXR = rightControllers[0];
-        LeftHandXR = leftControllers[0];
+        try
+        {
+            RightHandXR = rightControllers[0];
+            LeftHandXR = leftControllers[0];
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            Plugin.Logger.LogWarning(
+                "Controllers.Setup had an issue finding your InputDevices. This isn't a cause for worry, but if you have issues with your hands ingame, make an issue with your logs and specs.");
+        }
     }
 }
