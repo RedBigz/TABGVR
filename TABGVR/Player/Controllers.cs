@@ -82,7 +82,7 @@ public static class Controllers
         catch (ArgumentOutOfRangeException)
         {
             Plugin.Logger.LogWarning(
-                "Controllers.Setup had an issue finding your InputDevices. This isn't a cause for worry, but if you have issues with your hands ingame, make an issue with your logs and specs.");
+                "Controllers.Setup had an issue finding your InputDevices. This isn't a cause for worry, but if you have issues with your hands in-game, make an issue with your logs and specs.");
         }
     }
 }
