@@ -7,6 +7,7 @@ using TABGVR.Network;
 using TABGVR.Player;
 using TABGVR.Player.Mundanities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 
 namespace TABGVR.Patches.Interactions;
@@ -82,7 +83,7 @@ internal class KinematicsPatch
             SetupConnection(__instance.rightHand);
             SetupConnection(__instance.leftHand);
         }
-        else if (PhotonServerConnector.IsNetworkMatch)
+        else if (PhotonServerConnector.IsNetworkMatch && SceneManager.GetActiveScene().name != "MainMenu")
             __instance.gameObject.AddComponent<NetKinematics>();
     }
 
@@ -167,7 +168,7 @@ internal class KinematicsPatch
 
         if (_updateCounter != 0) return;
 
-        if (!PhotonServerConnector.IsNetworkMatch) return;
+        if (!PhotonServerConnector.IsNetworkMatch || SceneManager.GetActiveScene().name == "MainMenu") return;
 
         var packet = new byte[8 * 18];
 
