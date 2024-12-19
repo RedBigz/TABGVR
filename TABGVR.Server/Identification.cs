@@ -3,6 +3,11 @@ using Landfall.Network;
 
 namespace TABGVR.Server;
 
+/// <summary>
+/// An API which detects VR players. Currently broken at the moment.
+/// </summary>
+/// <param name="playerStore">The player store to send packets to the player</param>
+/// <param name="world">The current <see cref="ServerClient"/></param>
 public class Identification(PlayerStore playerStore, ServerClient world)
 {
     public bool Verified = false;

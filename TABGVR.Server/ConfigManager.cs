@@ -3,6 +3,9 @@ using TABGVR.Server.Types;
 
 namespace TABGVR.Server;
 
+/// <summary>
+/// Static class managing the config file.
+/// </summary>
 public static class ConfigManager
 {
     public static readonly string ConfigFileName = "vr_config.json";

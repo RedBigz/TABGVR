@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 namespace TABGVR.Player;
 
+/// <summary>
+/// A component that sets the object's position to the relative floor of the player.
+/// </summary>
 public class Floor : MonoBehaviour
 {
     private bool stationary = false;

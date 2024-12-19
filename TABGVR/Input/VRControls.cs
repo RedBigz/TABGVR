@@ -54,6 +54,10 @@ public class VRControls : MonoBehaviour
         mapHandler = InventoryUI.instance.gameObject.GetComponentInChildren<MapHandler>();
     }
 
+    /// <summary>
+    /// Swaps weapon based on offset.
+    /// </summary>
+    /// <param name="offset">Offset the swap weapons by (e.g. -1 means weapon above & 1 means weapon below)</param>
     private void SwapWeaponViaOffset(int offset)
     {
         if (weaponHandler.CurrentWeapon is Pickup.EquipSlots.None or Pickup.EquipSlots.ThrowableSlot)
@@ -76,6 +80,11 @@ public class VRControls : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates a <see cref="VRInputBinary"/>'s value to <paramref name="value"/>.
+    /// </summary>
+    /// <param name="input">An input</param>
+    /// <param name="value">A boolean value</param>
     private void UpdateBinaryInputsInternal(VRInputBinary input, bool value)
     {
         // Plugin.Logger.LogInfo($"Updating binary inputs: {input} <- {value}");
@@ -92,6 +101,13 @@ public class VRControls : MonoBehaviour
         input.HoldingDown = value;
     }
 
+    /// <summary>
+    /// Updates a <see cref="VRInputBinary"/> to a <see cref="InputFeatureUsage{Boolean}"/> on an <see cref="InputDevice"/>.
+    /// </summary>
+    /// <param name="hand">The hand the feature will be searched for</param>
+    /// <param name="input">The <see cref="VRInputBinary"/> to update</param>
+    /// <param name="feature">The feature to search for</param>
+    /// <returns>The feature's value (for other purposes)</returns>
     private bool UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<bool> feature)
     {
         hand.TryGetFeatureValue(feature, out var value);
@@ -99,6 +115,13 @@ public class VRControls : MonoBehaviour
         return value;
     }
 
+    /// <summary>
+    /// Updates a <see cref="VRInputBinary"/> to a <see cref="InputFeatureUsage{Float}"/> on an <see cref="InputDevice"/>.
+    /// </summary>
+    /// <param name="hand">The hand the feature will be searched for</param>
+    /// <param name="input">The <see cref="VRInputBinary"/> to update</param>
+    /// <param name="feature">The feature to search for</param>
+    /// <returns>The feature's value (for other purposes)</returns>
     private float UpdateBinaryInputs(InputDevice hand, VRInputBinary input, InputFeatureUsage<float> feature)
     {
         hand.TryGetFeatureValue(feature, out var value);
@@ -106,6 +129,11 @@ public class VRControls : MonoBehaviour
         return value;
     }
 
+    /// <summary>
+    /// Updates a <see cref="VRInput1D"/>'s X value using a float value.
+    /// </summary>
+    /// <param name="input">The <see cref="VRInput1D"/> to set</param>
+    /// <param name="value">The value to set <paramref name="input"/> to</param>
     private void Update1DInputs(VRInput1D input, float value)
     {
         input.LastFrameDigital = input.Digital;
@@ -252,6 +280,10 @@ public class VRControls : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Turns player by an angle.
+    /// </summary>
+    /// <param name="direction">Angle in degrees</param>
     private void SnapTurn(float direction)
     {
         UIPorter.UISnapTurnBase?.transform.Rotate(Vector3.up, direction);

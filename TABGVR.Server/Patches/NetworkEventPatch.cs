@@ -7,6 +7,12 @@ namespace TABGVR.Server.Patches;
 [HarmonyPatch(typeof(ServerClient), nameof(ServerClient.HandleNetorkEvent))]
 public class NetworkEventPatch
 {
+    /// <summary>
+    /// Manages VR networking events received.
+    /// </summary>
+    /// <param name="__instance">The current <see cref="ServerClient"/></param>
+    /// <param name="networkEvent">Packet received by the server</param>
+    /// <returns></returns>
     public static bool Prefix(ServerClient __instance, ServerPackage networkEvent)
     {
         switch (networkEvent.Code)

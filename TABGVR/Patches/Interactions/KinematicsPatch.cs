@@ -87,7 +87,7 @@ internal class KinematicsPatch
     }
 
     /// <summary>
-    ///     Runs aiming and positioning for arms and guns after Holding.Update.
+    ///     Runs aiming and positioning for arms and guns after <see cref="Holding.Update" />.
     /// </summary>
     /// <param name="__instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.Update))]
@@ -154,6 +154,10 @@ internal class KinematicsPatch
 
     private static float _updateCounter;
 
+    /// <summary>
+    ///     Sends aiming and positioning for arms and guns over the network after <see cref="Holding.FixedUpdate" />.
+    /// </summary>
+    /// <param name="__instance">Holding Script</param>
     [HarmonyPatch(nameof(Holding.FixedUpdate))]
     [HarmonyPostfix]
     private static void FixedUpdatePostfix(Holding __instance)

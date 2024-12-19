@@ -3,6 +3,9 @@ using UnityEngine.SpatialTracking;
 
 namespace TABGVR.Player;
 
+/// <summary>
+/// A TrackedPoseDriver which only transforms on the Y axis (for hip rotation of the player).
+/// </summary>
 public class RotationTargetDriver : TrackedPoseDriver
 {
     public override void SetLocalTransform(Vector3 newPosition, Quaternion newRotation, PoseDataFlags poseFlags)

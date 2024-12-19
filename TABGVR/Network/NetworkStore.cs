@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace TABGVR.Network;
 
+/// <summary>
+/// Local network store for replicated players.
+/// </summary>
 public class NetworkStore
 {
     public Vector3 HmdPosition = Vector3.zero;

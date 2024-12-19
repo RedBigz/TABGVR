@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace TABGVR.Player;
 
+/// <summary>
+/// A manager used for referencing <see cref="GameObject"/>s and components related to the player.
+/// </summary>
 public class PlayerManager
 {
     public static PlayerManager LocalPlayer;

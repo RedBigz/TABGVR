@@ -11,6 +11,11 @@ public class NetworkEventPatch
 {
     public static bool Interrogated = false;
 
+    /// <summary>
+    /// Manages VR networking events received.
+    /// </summary>
+    /// <param name="clientPackage">Packet received by the client</param>
+    /// <returns></returns>
     public static bool Prefix(ClientPackage clientPackage)
     {
         // Plugin.Logger.LogInfo(clientPackage.Code);

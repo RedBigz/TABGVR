@@ -9,6 +9,10 @@ public class NetKinematics : MonoBehaviour
     NetworkPlayer netPlayer;
     private Holding holding;
 
+    /// <summary>
+    /// Sets up joint for kinematics
+    /// </summary>
+    /// <param name="joint">Hand <see cref="Rigidbody"/> from <see cref="holding"/></param>
     private void Setup(Rigidbody joint)
     {
         var arm = joint.transform.parent.Find(joint.gameObject.name.Replace("Hand", "Arm")).gameObject;
