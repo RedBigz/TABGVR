@@ -10,12 +10,14 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
+// using TABGVR.PatchAttributes;
 using TABGVR.Player;
 
 namespace TABGVR.Patches.Interactions;
 
 // [HarmonyPatch(typeof(InteractionHandler), nameof(InteractionHandler.Throwing), MethodType.Enumerator)]
 // [HarmonyDebug]
+// [VRPatch]
 public static class ThrowingPatch
 {
     public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) =>

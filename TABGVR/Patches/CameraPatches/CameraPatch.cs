@@ -1,6 +1,7 @@
 using DeepSky.Haze;
 using HarmonyLib;
 using HighlightingSystem;
+using TABGVR.PatchAttributes;
 using TABGVR.Player;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -10,6 +11,7 @@ using UnityEngine.SpatialTracking;
 namespace TABGVR.Patches.CameraPatches;
 
 [HarmonyPatch(typeof(PlayerCamera))]
+[VRPatch]
 public class CameraPatch
 {
     /// <summary>

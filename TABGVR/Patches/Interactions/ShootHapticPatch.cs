@@ -1,11 +1,13 @@
 using System;
 using HarmonyLib;
 using TABGVR.Input;
+using TABGVR.PatchAttributes;
 using TABGVR.Player;
 
 namespace TABGVR.Patches.Interactions;
 
 [HarmonyPatch(typeof(Weapon), nameof(Weapon.Awake))]
+[VRPatch]
 public class ShootHapticPatch
 {
     private const float Amplitude = 0.8f;

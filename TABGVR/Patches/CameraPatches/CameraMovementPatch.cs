@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
+using TABGVR.PatchAttributes;
 
 namespace TABGVR.Patches.CameraPatches;
 
 [HarmonyPatch(typeof(CameraMovement))]
+[VRPatch]
 public class CameraMovementPatch
 {
     [HarmonyPatch(nameof(CameraMovement.LateUpdate))]

@@ -1,5 +1,6 @@
 using HarmonyLib;
 using TABGVR.Input;
+using TABGVR.PatchAttributes;
 using TABGVR.Player;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
@@ -7,6 +8,7 @@ using UnityEngine.SpatialTracking;
 namespace TABGVR.Patches;
 
 [HarmonyPatch(typeof(global::Player))]
+[VRPatch]
 public class PlayerPatch
 {
     public static VRControls CurrentVRControls;

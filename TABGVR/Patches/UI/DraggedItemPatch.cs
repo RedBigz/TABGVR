@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
 using Landfall.TABG.UI;
+using TABGVR.PatchAttributes;
 using TABGVR.Util;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace TABGVR.Patches.UI;
 #if DEBUG
 [HarmonyDebug]
 #endif
+[VRPatch]
 public class DraggedItemPatch
 {
     public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

@@ -1,5 +1,6 @@
 using DeepSky.Haze;
 using HarmonyLib;
+using TABGVR.PatchAttributes;
 using TABGVR.Player;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
@@ -8,6 +9,7 @@ using UnityEngine.SpatialTracking;
 namespace TABGVR.Patches.UI;
 
 [HarmonyPatch(typeof(CameraIdleMovement), nameof(CameraIdleMovement.Start))]
+[VRPatch]
 public static class MainMenuCameraPatch
 {
     public static void Postfix(CameraIdleMovement __instance)

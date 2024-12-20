@@ -2,11 +2,13 @@ using System.IO;
 using HarmonyLib;
 using Landfall.Network;
 using TABGVR.Network;
+using TABGVR.PatchAttributes;
 using UnityEngine;
 
 namespace TABGVR.Patches.Networking;
 
 [HarmonyPatch(typeof(ServerConnector), nameof(ServerConnector.OnEvent))]
+[VRPatch, FlatscreenPatch]
 public class NetworkEventPatch
 {
     public static bool Interrogated = false;
