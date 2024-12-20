@@ -36,12 +36,6 @@ public class Plugin : BaseUnityPlugin
         
 #if DEBUG
         HarmonyFileLog.Enabled = true;
-
-        Logger.LogInfo("Patched methods:");
-        foreach (var patchedMethod in harmony.GetPatchedMethods())
-        {
-            Logger.LogInfo(patchedMethod.DeclaringType?.ToString());
-        }
 #endif
         
         harmony.PatchAll();
