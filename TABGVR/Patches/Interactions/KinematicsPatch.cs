@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using HarmonyLib;
@@ -6,9 +7,12 @@ using TABGVR.Input;
 using TABGVR.Network;
 using TABGVR.Player;
 using TABGVR.Player.Mundanities;
+using TABGVR.Util;
+using UltimateIK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
+using Object = UnityEngine.Object;
 
 namespace TABGVR.Patches.Interactions;
 
@@ -199,12 +203,13 @@ internal class KinematicsPatch
                 WriteVector(Controllers.RightHand.transform.position);
 
                 if (heldObject)
-                    WriteVector(Gripping && heldObject.leftHandPos
-                        ? Quaternion.LookRotation(Controllers.LeftHand.transform.position -
-                                                  Controllers.RightHand.transform.position).eulerAngles
-                        : (Controllers.RightHand.transform.rotation * Quaternion.Euler(
-                            90f + heldObject.rightHandPos.localRotation.x,
-                            heldObject.rightHandPos.localRotation.y, 0f)).eulerAngles);
+                    // WriteVector(Gripping && heldObject.leftHandPos
+                    //     ? Quaternion.LookRotation(Controllers.LeftHand.transform.position -
+                    //                               Controllers.RightHand.transform.position).eulerAngles
+                    //     : (Controllers.RightHand.transform.rotation * Quaternion.Euler(
+                    //         90f + heldObject.rightHandPos.localRotation.x,
+                    //         heldObject.rightHandPos.localRotation.y, 0f)).eulerAngles);
+                    WriteVector(heldObject.gameObject.transform.eulerAngles);
                 else
                     WriteVector(Vector3.zero);
             }
