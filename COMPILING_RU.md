@@ -22,7 +22,7 @@ git clone https://github.com/RedBigz/TABGVR --recurse-submodules
 
 Для начала установите [TABG.VR.QuickInstallerContainer.tar.xz](https://redbigz.com/lfs/TABG.VR.QuickInstallerContainer.tar.xz) и распакуйте архив где угодно. Это понадобится вам позже.
 
-Скопируйте файлы из `TABGVR/core` в новую папку с названием `GameReferences` в корне репозитория.
+Скопируйте файлы из `BepInEx/core` в новую папку с названием `GameReferences` в корне репозитория.
 
 Теперь, следуйте инструкции для легальной сборки файлов *только* в инструкции ниже.
 
@@ -81,7 +81,7 @@ dotnet build -c Release TABGVR/TABGVR.csproj
 ```
 *Если TABG установлен у вас в месте, отличном от диска C:, добавьте `-p:TABGFolder="<Путь к TABG>"` к команде.*
 
-Скопируйте `TABGVR/bin/Release/netstandard2.1/TABGVR.dll` в `<путь к бандлу>/TABGVR/plugins` (готовый бандл) или `<директория TABG>/BepInEx/plugins` (самостоятельная сборка)
+Скопируйте `TABGVR/bin/Release/netstandard2.1/TABGVR.dll` в `<путь к бандлу>/BepInEx/plugins` (готовый бандл) или `<директория TABG>/BepInEx/plugins` (самостоятельная сборка)
 
 **Если вы используете готовый бандл, скопируйте файлы бандла в корень папки TABG.**
 

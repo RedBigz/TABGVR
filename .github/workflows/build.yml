@@ -25,11 +25,11 @@ jobs:
           tar -xf managed.tar.xz -C Managed
           
           mkdir GameReferences
-          cp Template/TABGVR/core/* GameReferences # works well enough
+          cp Template/BepInEx/core/* GameReferences # works well enough
       - name: Build TABGVR (Client)
         run: dotnet build -c Release -p:TABGManaged=$(pwd)/Managed TABGVR/TABGVR.csproj
       - name: Copy Binary to Client Template
-        run: cp ./TABGVR/bin/Release/netstandard2.1/TABGVR.dll Template/TABGVR/plugins
+        run: cp ./TABGVR/bin/Release/netstandard2.1/TABGVR.dll Template/BepInEx/plugins
       - name: Upload Client Artifact
         uses: actions/upload-artifact@v4
         with:

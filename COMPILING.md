@@ -22,7 +22,7 @@ The pre-made bundle contains the required assemblies for running the mod.
 
 Firstly, download [TABG.VR.QuickInstallerContainer.tar.xz](https://redbigz.com/lfs/TABG.VR.QuickInstallerContainer.tar.xz) and unzip it wherever. You will need this for later.
 
-Copy the contents of `TABGVR/core` into a new folder called `GameReferences` in the root of the repository.
+Copy the contents of `BepInEx/core` into a new folder called `GameReferences` in the root of the repository.
 
 Now follow the guide for gathering managed assemblies legally *only* in the sourcing guide below.
 
@@ -81,7 +81,7 @@ dotnet build -c Release TABGVR/TABGVR.csproj
 ```
 *If you have installed TABG in a place other than your C:\ drive, append `-p:TABGFolder="<Your TABG directory>"` to the command.*
 
-Copy `TABGVR/bin/Release/netstandard2.1/TABGVR.dll` to `<bundle>/TABGVR/plugins` (pre-made bundle) or `<TABG directory>/BepInEx/plugins` (sourced)
+Copy `TABGVR/bin/Release/netstandard2.1/TABGVR.dll` to `<bundle>/BepInEx/plugins` (pre-made bundle) or `<TABG directory>/BepInEx/plugins` (sourced)
 
 **If you are using the pre-made bundle, copy the entire contents of the bundle into the root of your TABG folder.**
 
