@@ -44,7 +44,9 @@ public class NetworkEventPatch
 
                 byte[] message = [player.PlayerIndex, ..networkEvent.Buffer];
 
-                __instance.SendMessageToClients(networkEvent.Code, message, byte.MaxValue, true);
+                var recipients = from watcher in ServerChunks.Instance.GetWatchers(player.ChunkData) select watcher.PlayerIndex;
+
+                __instance.SendMessageToClients(networkEvent.Code, message, recipients.ToArray(), true);
 
                 return false;
             default:
