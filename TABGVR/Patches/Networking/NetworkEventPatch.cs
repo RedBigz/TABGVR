@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using HarmonyLib;
 using Landfall.Network;
@@ -38,41 +39,15 @@ public class NetworkEventPatch
 
                         var store = NetworkStoreList.NetworkStores[playerIndex];
 
-                        store.HmdPosition = new Vector3(
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble()
-                        );
+                        Vector3 ReadVector() => new((float)reader.ReadDouble(), (float)reader.ReadDouble(),
+                            (float)reader.ReadDouble());
 
-                        store.HmdRotation = new Vector3(
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble()
-                        );
-
-                        store.LeftHandPosition = new Vector3(
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble()
-                        );
-
-                        store.LeftHandRotation = new Vector3(
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble()
-                        );
-
-                        store.RightHandPosition = new Vector3(
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble()
-                        );
-
-                        store.RightHandRotation = new Vector3(
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble()
-                        );
+                        store.HmdPosition = ReadVector();
+                        store.HmdRotation = ReadVector();
+                        store.LeftHandPosition = ReadVector();
+                        store.LeftHandRotation = ReadVector();
+                        store.RightHandPosition = ReadVector();
+                        store.RightHandRotation = ReadVector();
                     }
                 }
 
