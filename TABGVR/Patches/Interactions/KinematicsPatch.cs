@@ -182,9 +182,9 @@ internal class KinematicsPatch
             {
                 void WriteVector(Vector3 vector)
                 {
-                    writer.Write((double)vector.x);
-                    writer.Write((double)vector.y);
-                    writer.Write((double)vector.z);
+                    writer.Write(vector.x);
+                    writer.Write(vector.y);
+                    writer.Write(vector.z);
                 }
 
                 var heldObject = Grenades.SelectedGrenade?.GetComponent<HoldableObject>() ?? __instance.heldObject;

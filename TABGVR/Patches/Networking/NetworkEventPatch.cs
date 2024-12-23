@@ -39,8 +39,7 @@ public class NetworkEventPatch
 
                         var store = NetworkStoreList.NetworkStores[playerIndex];
 
-                        Vector3 ReadVector() => new((float)reader.ReadDouble(), (float)reader.ReadDouble(),
-                            (float)reader.ReadDouble());
+                        Vector3 ReadVector() => new(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
                         store.HmdPosition = ReadVector();
                         store.HmdRotation = ReadVector();

@@ -35,7 +35,8 @@ public class NetworkEventPatch
                     return false;
                 }
 
-                if (networkEvent.Buffer.Length != 8 * 18) // drop malformed packets and kick the responsible player
+                if (networkEvent.Buffer.Length !=
+                    sizeof(float) * 3 * 6) // drop malformed packets and kick the responsible player
                 {
                     PlayerKickCommand.Run(player,
                         __instance, KickReason.Invalid);
@@ -44,7 +45,8 @@ public class NetworkEventPatch
 
                 byte[] message = [player.PlayerIndex, ..networkEvent.Buffer];
 
-                var recipients = from watcher in ServerChunks.Instance.GetWatchers(player.ChunkData) select watcher.PlayerIndex;
+                var recipients = from watcher in ServerChunks.Instance.GetWatchers(player.ChunkData)
+                    select watcher.PlayerIndex;
 
                 __instance.SendMessageToClients(networkEvent.Code, message, recipients.ToArray(), true);
 
