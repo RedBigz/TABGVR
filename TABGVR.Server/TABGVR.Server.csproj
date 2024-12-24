@@ -12,7 +12,7 @@
     <!--  Custom Build Settings - to override add -p:key="value" to `dotnet build`  -->
     <PropertyGroup>
         <!--  Build target (TASM - Totally Accurate Server Mod, Citrus - CitrusLib)  -->
-        <PluginTarget>TASM</PluginTarget>
+        <PluginTarget>Citrus</PluginTarget>
     </PropertyGroup>
 
     <PropertyGroup>
