@@ -21,7 +21,17 @@ public class Identification(PlayerStore playerStore, ServerClient world)
 
         world.WaitThenDoAction(10, () =>
         {
-            if (Verified || !ConfigManager.Config.VROnly) return;
+            if (Verified)
+            {
+#if CITRUSLIB
+                Plugin.ModLogger.Log(
+#elif TASM
+                Logging.Log(Logging.LogLevel.Info, "TABGVR",
+#endif
+                    $"Successfully verified {playerStore.playerServer.PlayerName}.");
+
+                return;
+            }
 
 #if CITRUSLIB
             CitrusLib.Citrus.SelfParrot(playerStore.playerServer,
