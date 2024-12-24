@@ -1,6 +1,10 @@
 using Epic.OnlineServices.AntiCheatCommon;
 using Landfall.Network;
 
+#if TASM
+using TASM.Common.Helpers;
+#endif
+
 namespace TABGVR.Server;
 
 /// <summary>
