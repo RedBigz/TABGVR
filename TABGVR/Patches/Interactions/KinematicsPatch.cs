@@ -5,6 +5,7 @@ using HarmonyLib;
 using Landfall.Network;
 using TABGVR.Input;
 using TABGVR.Network;
+using TABGVR.PatchAttributes;
 using TABGVR.Player;
 using TABGVR.Player.Mundanities;
 using TABGVR.Util;
@@ -17,6 +18,7 @@ using Object = UnityEngine.Object;
 namespace TABGVR.Patches.Interactions;
 
 [HarmonyPatch(typeof(Holding))]
+[VRPatch]
 internal class KinematicsPatch
 {
     internal static bool GripAvailable;

@@ -3,11 +3,13 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using TABGInput;
 using TABGVR.Input;
+using TABGVR.PatchAttributes;
 using TABGVR.Player;
 
 namespace TABGVR.Patches.Interactions;
 
 [HarmonyPatch(typeof(InteractionHandler), nameof(InteractionHandler.StartPickup), MethodType.Enumerator)]
+[VRPatch]
 public static class SwapWeaponPatch
 {
     [HarmonyTranspiler]

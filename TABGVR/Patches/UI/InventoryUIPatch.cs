@@ -1,4 +1,5 @@
 using HarmonyLib;
+using TABGVR.PatchAttributes;
 using TABGVR.Util;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 namespace TABGVR.Patches.UI;
 
 [HarmonyPatch(typeof(InventoryUI), nameof(InventoryUI.Start))]
+[VRPatch]
 public static class InventoryUIPatch
 {
     /// <summary>

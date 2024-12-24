@@ -9,6 +9,8 @@ public class NetKinematics : MonoBehaviour
     NetworkPlayer netPlayer;
     private Holding holding;
 
+    private bool isSetUp;
+
     /// <summary>
     /// Sets up joint for kinematics
     /// </summary>
@@ -23,20 +25,27 @@ public class NetKinematics : MonoBehaviour
 
         joint.isKinematic = false;
         arm.GetComponent<Rigidbody>().isKinematic = false;
+        
+        isSetUp = true;
     }
 
     private void Start()
     {
         netPlayer = GetComponent<NetworkPlayer>();
         holding = GetComponent<Holding>();
-        
-        Setup(holding.leftHand);
-        Setup(holding.rightHand);
     }
 
     private void FixedUpdate()
     {
         if (!NetworkStoreList.NetworkStores.TryGetValue(netPlayer.Index, out var store)) return;
+        
+        if (!isSetUp)
+        {
+            // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+            Setup(holding.leftHand);
+            // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+            Setup(holding.rightHand);
+        }
 
         var leftHandPosition = store.LeftHandPosition - store.HmdPosition + netPlayer.m_Camera.position;
         var rightHandPosition = store.RightHandPosition - store.HmdPosition + netPlayer.m_Camera.position;

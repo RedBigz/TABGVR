@@ -3,10 +3,12 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using Landfall.TABG.UI;
 using TABGVR.Input;
+using TABGVR.PatchAttributes;
 
 namespace TABGVR.Patches.UI;
 
 [HarmonyPatch(typeof(InventoryUIManager), nameof(InventoryUIManager.Update))]
+[VRPatch]
 public class InventoryUIManagerUpdatePatch
 {
     /// <summary>

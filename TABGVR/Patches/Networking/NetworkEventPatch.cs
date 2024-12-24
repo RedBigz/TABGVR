@@ -3,11 +3,13 @@ using System.IO;
 using HarmonyLib;
 using Landfall.Network;
 using TABGVR.Network;
+using TABGVR.PatchAttributes;
 using UnityEngine;
 
 namespace TABGVR.Patches.Networking;
 
 [HarmonyPatch(typeof(ServerConnector), nameof(ServerConnector.OnEvent))]
+[VRPatch, FlatscreenPatch]
 public class NetworkEventPatch
 {
     public static bool Interrogated = false;
@@ -24,6 +26,7 @@ public class NetworkEventPatch
         switch (clientPackage.Code)
         {
             case (EventCode)PacketCodes.Interrogate: // Interrogate
+                if (!Plugin.VREnabled.Value) return false; // flatscreen players aren't allowed to respond to interrogations
                 ServerConnector.m_ServerHandler.SendMessageToServer((EventCode)PacketCodes.Interrogate, [], true);
                 Interrogated = true;
                 return false;

@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Landfall.TABG.UI.MainMenu;
+using TABGVR.PatchAttributes;
 using TABGVR.Util;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 namespace TABGVR.Patches.UI;
 
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+[VRPatch]
 public static class MainMenuPatch
 {
     public static void Postfix(MainMenuManager __instance)
