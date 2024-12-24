@@ -14,6 +14,8 @@ public class Identification(PlayerStore playerStore, ServerClient world)
 
     public void Interrogate()
     {
+        if (Verified || !ConfigManager.Config.VROnly) return;
+
         world.SendMessageToClients((EventCode)PacketCodes.Interrogate, [], playerStore.playerServer.PlayerIndex,
             true); // send interrogation packet
 
