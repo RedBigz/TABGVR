@@ -25,6 +25,7 @@ public class NetworkEventPatch
         switch (clientPackage.Code)
         {
             case (EventCode)PacketCodes.Interrogate: // Interrogate
+                if (!Plugin.VREnabled.Value) return false; // flatscreen players aren't allowed to respond to interrogations
                 ServerConnector.m_ServerHandler.SendMessageToServer((EventCode)PacketCodes.Interrogate, [], true);
                 Interrogated = true;
                 return false;
