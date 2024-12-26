@@ -17,7 +17,7 @@ public class PlayerNewSpawnPatch
     {
         world.WaitThenDoAction(3, () =>
         {
-            var store = new PlayerStore(world.GameRoomReference.FindPlayer(player.PlayerIndex)); // Create PlayerStore
+            var store = new PlayerStore(player); // Create PlayerStore
 
             store.Identification = new(store, world);
             store.Identification.Interrogate();
