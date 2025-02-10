@@ -6,7 +6,7 @@ using UnityEngine;
 namespace TABGVR.Patches.Scopes;
 
 [HarmonyPatch(typeof(RedDot))]
-[VRPatch, FlatscreenPatch]
+[VRPatch]
 public static class ScopePatch
 {
     [HarmonyPatch(nameof(RedDot.Start))]
