@@ -49,7 +49,7 @@ public class VRControls : MonoBehaviour
         interactionHandler.canNotPickUpAction = () => currentPickup = null;
 
         inputHandler.enabled = false;
-        inputHandler.cameraMovement.ADS = true;
+        inputHandler.cameraMovement.ADS = false;
 
         menuTransitions = InventoryUI.instance.gameObject.GetComponent<MenuTransitions>();
         mapHandler = InventoryUI.instance.gameObject.GetComponentInChildren<MapHandler>();

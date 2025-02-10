@@ -7,7 +7,7 @@ namespace TABGVR.Patches.Scopes;
 
 [HarmonyPatch(typeof(RedDot))]
 [VRPatch, FlatscreenPatch]
-public static class RedDotPatch
+public static class ScopePatch
 {
     [HarmonyPatch(nameof(RedDot.Start))]
     [HarmonyPostfix]
@@ -15,6 +15,6 @@ public static class RedDotPatch
     {
         __instance.dotTransform.gameObject.SetActive(true);
         __instance.enabled = false;
-        __instance.gameObject.AddComponent<VRRedDot>();
+        __instance.gameObject.AddComponent<VRScope>();
     }
 }
