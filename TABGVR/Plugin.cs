@@ -29,6 +29,8 @@ public class Plugin : BaseUnityPlugin
 
     private void Awake()
     {
+        AssetBundle.Load();
+        
         SnapTurnEnabled = Config.Bind("Input", "SnapTurn", true, "Use snap turn instead of smooth turn.");
         AskOnStartup = Config.Bind("Input", "AskOnStartup", true, "Ask to use VR mode on startup.");
         VREnabled = Config.Bind("Input", "VREnabled", true,

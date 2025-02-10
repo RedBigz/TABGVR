@@ -1,6 +1,7 @@
 using System;
 using Landfall.Network;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace TABGVR.Network;
 
@@ -26,7 +27,11 @@ public class NetKinematics : MonoBehaviour
         joint.isKinematic = false;
         arm.GetComponent<Rigidbody>().isKinematic = false;
         
-        isSetUp = true;
+        foreach (var animationObject in joint.GetComponents<AnimationObject>()) Object.Destroy(animationObject);
+        foreach (var animationObject in arm.GetComponents<AnimationObject>()) Object.Destroy(animationObject);
+
+        foreach (var collisionChecker in joint.GetComponents<CollisionChecker>()) Object.Destroy(collisionChecker);
+        foreach (var collisionChecker in arm.GetComponents<CollisionChecker>()) Object.Destroy(collisionChecker);
     }
 
     private void Start()
@@ -45,6 +50,8 @@ public class NetKinematics : MonoBehaviour
             Setup(holding.leftHand);
             // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
             Setup(holding.rightHand);
+            
+            isSetUp = true;
         }
 
         var leftHandPosition = store.LeftHandPosition - store.HmdPosition + netPlayer.m_Camera.position;
