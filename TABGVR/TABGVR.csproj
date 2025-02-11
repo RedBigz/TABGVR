@@ -37,6 +37,7 @@
         <Reference Include="$(TABGManaged)\Assembly-CSharp.dll" Publicize="true" Private="false"/>
         <Reference Include="$(TABGManaged)\Assembly-CSharp-firstpass.dll" Publicize="true" Private="false"/>
         <Reference Include="$(TABGManaged)\Unity.Postprocessing.Runtime.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(TABGManaged)\Unity.TextMeshPro.dll" Publicize="true" Private="false"/>
         <Reference Include="$(TABGManaged)\UnityEngine.UI.dll" Publicize="true" Private="false"/>
         <Reference Include="$(TABGManaged)\UnityEngine.SpatialTracking.dll" Publicize="true" Private="false"/>
         <Reference Include="$(GameReferences)\Unity.XR.CoreUtils.dll" Publicize="true"/>

@@ -6,4 +6,5 @@ TABG. You can decompile it if you really want though. There is no executables in
 support that as a security measure, so there isn't any undocumented source code that would give you a virus or anything.
 
 # Asset Credits
-**Scope Shader** - [DarkBlade909](https://github.com/DarkBlade909)'s [Scope Shader](https://github.com/DarkBlade909/ScopeShader)
+**Scope Shader** - [DarkBlade909](https://github.com/DarkBlade909)'s [Scope Shader](https://github.com/DarkBlade909/ScopeShader) <br />
+**Streamline Icons** - [Website](https://www.streamlinehq.com)
