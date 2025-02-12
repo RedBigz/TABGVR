@@ -3,6 +3,9 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/redbigz/TABGVR/total?style=for-the-badge&logo=github)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/redbigz/TABGVR?style=for-the-badge&logo=github)
 
+[![Liberapay receiving](https://img.shields.io/liberapay/receives/redbigz?style=for-the-badge&logo=liberapay&labelColor=black)](https://liberapay.com/redbigz)
+[![Static Badge](https://img.shields.io/badge/Donate%20via%20Stripe-white?style=for-the-badge&logo=stripe)](https://buy.stripe.com/fZe8xt5dc81G2tidQX)
+
 [ENG | [РУС](README_RU.md)]
 
 ![Attachments](img/demos/attachments.gif)
