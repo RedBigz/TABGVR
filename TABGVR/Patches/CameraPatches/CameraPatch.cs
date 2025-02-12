@@ -5,6 +5,7 @@ using TABGVR.PatchAttributes;
 using TABGVR.Player;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SpatialTracking;
 
@@ -39,7 +40,7 @@ public class CameraPatch
             layer = __instance.gameObject.layer
         };
 
-        __instance.enabled = false;
+        __instance.cam.enabled = false;
 
         var camera = gameObject.AddComponent<UnityEngine.Camera>();
         camera.stereoTargetEye = StereoTargetEyeMask.Both;
