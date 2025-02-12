@@ -48,6 +48,12 @@ public class CameraPatch
         camera.nearClipPlane = 0.01f;
         // camera.targetDisplay = 1;
 
+        void TransferCommandBuffers(CameraEvent cameraEvent) =>
+            camera.AddCommandBuffer(cameraEvent, __instance.cam.GetCommandBuffers(cameraEvent)[0]);
+
+        TransferCommandBuffers(CameraEvent.BeforeImageEffectsOpaque);
+        TransferCommandBuffers(CameraEvent.BeforeImageEffects);
+
         var driver = gameObject.AddComponent<TrackedPoseDriver>();
         driver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
         driver.poseSource = TrackedPoseDriver.TrackedPose.Head;
