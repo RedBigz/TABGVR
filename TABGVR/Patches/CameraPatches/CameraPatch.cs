@@ -1,3 +1,4 @@
+using System.Collections;
 using DeepSky.Haze;
 using HarmonyLib;
 using HighlightingSystem;
@@ -40,19 +41,14 @@ public class CameraPatch
             layer = __instance.gameObject.layer
         };
 
-        __instance.cam.enabled = false;
-
         var camera = gameObject.AddComponent<UnityEngine.Camera>();
         camera.stereoTargetEye = StereoTargetEyeMask.Both;
         camera.enabled = true;
         camera.nearClipPlane = 0.01f;
         // camera.targetDisplay = 1;
 
-        void TransferCommandBuffers(CameraEvent cameraEvent) =>
-            camera.AddCommandBuffer(cameraEvent, __instance.cam.GetCommandBuffers(cameraEvent)[0]);
-
-        TransferCommandBuffers(CameraEvent.BeforeImageEffectsOpaque);
-        TransferCommandBuffers(CameraEvent.BeforeImageEffects);
+        TransferCommandBuffers(__instance.cam, camera, CameraEvent.BeforeImageEffectsOpaque);
+        TransferCommandBuffers(__instance.cam, camera, CameraEvent.BeforeImageEffects);
 
         var driver = gameObject.AddComponent<TrackedPoseDriver>();
         driver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
@@ -85,5 +81,16 @@ public class CameraPatch
         constraint.AddSource(source);
 
         constraint.constraintActive = true;
+
+        global::Player.localPlayer.StartCoroutine(WaitToDisableCamera(__instance.cam, 0.1f));
+    }
+    
+    internal static void TransferCommandBuffers(Camera oldCamera, Camera newCamera, CameraEvent cameraEvent) =>
+        newCamera.AddCommandBuffer(cameraEvent, oldCamera.GetCommandBuffers(cameraEvent)[0]);
+
+    internal static IEnumerator WaitToDisableCamera(Camera camera, float time)
+    {
+        yield return new WaitForSeconds(time);
+        camera.enabled = false;
     }
 }

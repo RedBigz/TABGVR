@@ -1,9 +1,13 @@
+using System.Linq;
 using DeepSky.Haze;
 using HarmonyLib;
 using TABGVR.PatchAttributes;
+using TABGVR.Patches.CameraPatches;
 using TABGVR.Player;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 using UnityEngine.SpatialTracking;
 
 namespace TABGVR.Patches.UI;
@@ -31,28 +35,35 @@ public static class MainMenuCameraPatch
         };
 
         var oldCamera = __instance.GetComponent<Camera>();
-        oldCamera.enabled = false;
-        __instance.enabled = false;
+        // __instance.enabled = false;
 
         var camera = cameraObject.AddComponent<Camera>();
         camera.stereoTargetEye = StereoTargetEyeMask.Both;
         camera.enabled = true;
         camera.nearClipPlane = 0.01f;
 
-        var driver = cameraObject.AddComponent<TrackedPoseDriver>();
-        driver.trackingType = TrackedPoseDriver.TrackingType.RotationAndPosition;
-        driver.poseSource = TrackedPoseDriver.TrackedPose.Head;
+        CameraPatch.TransferCommandBuffers(oldCamera, camera, CameraEvent.BeforeImageEffectsOpaque);
+        CameraPatch.TransferCommandBuffers(oldCamera, camera, CameraEvent.BeforeImageEffects);
 
         cameraObject.AddComponent<FlareLayer>();
         cameraObject.AddComponent<DS_HazeView>();
 
-        var postProcessing = cameraObject.AddComponent<PostProcessLayer>();
-        postProcessing.volumeTrigger = cameraObject.transform;
-        postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
-        postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
-
         camera.cullingMask = oldCamera.cullingMask;
         Controllers.VRFloor.transform.parent = gameObject.transform;
+
+        // var postProcessing = cameraObject.AddComponent<PostProcessLayer>();
+        // postProcessing.volumeTrigger = gameObject.transform;
+        // postProcessing.volumeLayer = LayerMask.NameToLayer("Post");
+        // postProcessing.m_Resources = __instance.GetComponent<PostProcessLayer>().m_Resources;
+
+        var driver = cameraObject.AddComponent<TrackedPoseDriver>();
+        driver.trackingType = TrackedPoseDriver.TrackingType.RotationAndPosition;
+        driver.poseSource = TrackedPoseDriver.TrackedPose.Head;
+            
+        var volume = Object.FindObjectsOfType<PostProcessVolume>().First(vol => vol.name == "POST");
+        volume.sharedProfile.RemoveSettings<DepthOfField>(); // pesky dof ruining the menu
+
+        volume.StartCoroutine(CameraPatch.WaitToDisableCamera(oldCamera, 0.5f)); // we have a monobehaviour here so its easy to call the disable camera routine
 
         // constrain the camera
         // ConstraintSource source = new()
