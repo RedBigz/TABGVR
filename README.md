@@ -22,3 +22,9 @@
 
 ## Controller Layout
 ![Controller Layout](auxillary/controller_layout.svg)
+
+## On LLM use and artificial intelligence
+
+The majority of this project was made by a depressed 14-year-old late at night in 2024 to cope with her inner demons. Any AI use has been restricted to just maths or slight IL problems (as least from what I can recall now), such as understanding quaternions and fixing some assembly patches. No agents were used.
+
+**I hate the hype of people using AI agents to mod games into VR. It's sloppy and goes against my values as a developer.**
