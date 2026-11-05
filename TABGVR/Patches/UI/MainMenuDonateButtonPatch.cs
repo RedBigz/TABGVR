@@ -35,6 +35,6 @@ public static class MainMenuDonateButtonPatch
         Object.Destroy(donateButton.GetComponent<QuitGame>()); // Stop game from closing lmao
 
         var button = donateButton.GetComponent<Button>();
-        button.onClick.AddListener(() => Application.OpenURL("https://liberapay.com/redbigz"));
+        button.onClick.AddListener(() => Application.OpenURL("https://github.com/sponsors/RedBigz"));
     }
 }
