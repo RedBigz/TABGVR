@@ -6,8 +6,6 @@
 > [!WARNING]
 > (November 2026): Due to prolonged inactivity on this project (*cough cough 2 years*), you may see significant issues related to infra (e.g. CI), and shaders. I will be working out the kinks and pushing some updates soon.
 
-[ENG | [РУС](README_RU.md)]
-
 ![Attachments](img/demos/attachments.gif)
 ![M1A1 Thompson (ADS)](img/demos/m1a1_ads.gif)
 ![Rocket Launcher (ADS)](img/demos/rocket_ads.gif)
