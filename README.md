@@ -3,6 +3,9 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/redbigz/TABGVR/total?style=for-the-badge&logo=github)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/redbigz/TABGVR?style=for-the-badge&logo=github)
 
+> [!WARNING]
+> (November 2026): Due to prolonged inactivity on this project (*cough cough 2 years*), you may see significant issues related to infra (e.g. CI), and shaders. I will be working out the kinks and pushing some updates soon.
+
 [ENG | [РУС](README_RU.md)]
 
 ![Attachments](img/demos/attachments.gif)
